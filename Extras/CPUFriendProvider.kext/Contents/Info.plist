@@ -19,30 +19,15 @@
 		<key>CPUFriendProvider</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
-			<string>org.vanilla.driver.CPUFriendProvider</string>
+			<string>com.apple.driver.AppleACPIPlatform</string>
 			<key>IOClass</key>
-			<string>CPUFriendProvider</string>
-			<key>IOParentMatch</key>
-			<dict>
-				<key>IOPropertyMatch</key>
-				<dict>
-					<key>plugin-type</key>
-					<integer>1</integer>
-				</dict>
-				<key>IOProviderClass</key>
-				<string>IOACPIPlatformDevice</string>
-			</dict>
-			<key>IOProbeScore</key>
-			<integer>6000</integer>
-			<key>IOPropertyMatch</key>
-			<dict>
-				<key>IOCPUNumber</key>
-				<integer>0</integer>
-			</dict>
-			<key>IOProviderClass</key>
 			<string>AppleACPICPU</string>
-			<key>IOResourceMatch</key>
-			<string>ACPI</string>
+			<key>IONameMatch</key>
+			<string>processor</string>
+			<key>IOProbeScore</key>
+			<integer>1100</integer>
+			<key>IOProviderClass</key>
+			<string>IOACPIPlatformDevice</string>
 			<key>cf-frequency-data</key>
 			<data>
 			</data>
