@@ -37,7 +37,7 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
         auto name = provider->getName();
         if (!name)
           name = "(null)";
-        DBGLOG("proc @ looking for cf-frequency-data in %s", name);
+        DBGLOG("cpuf @ looking for cf-frequency-data in %s", name);
         
         auto data = OSDynamicCast(OSData, provider->getProperty("cf-frequency-data"));
         if (!data) {
@@ -45,11 +45,11 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
           if (cpu) {
             name = cpu->getName();
             if (!name) name = "(null)";
-            DBGLOG("proc @ looking for cf-frequency-data in %s", name);
+            DBGLOG("cpuf @ looking for cf-frequency-data in %s", name);
             
             data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
           } else {
-            SYSLOG("proc @ unable to access cpu parent");
+            SYSLOG("cpuf @ unable to access cpu parent");
           }
         }
         
@@ -57,11 +57,11 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
           callbackCpuf->frequencyDataSize = data->getLength();
           callbackCpuf->frequencyData = data->getBytesNoCopy();
         } else {
-          SYSLOG("proc @ failed to obtain cf-frequency-data");
+          SYSLOG("cpuf @ failed to obtain cf-frequency-data");
         }
       }
     } else {
-      SYSLOG("proc @ missing storage instance");
+      SYSLOG("cpuf @ missing storage instance");
     }
   }
   
