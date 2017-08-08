@@ -30,7 +30,7 @@ DefinitionBlock ("", "SSDT", 1, "APPLE ", "freqdata", 0x00000001)
                 One, 
                 
                 //
-                // Paste your desired power management data here.
+                // Power management data file to replace.
                 //
                 "cf-frequency-data", 
                 Buffer ()
