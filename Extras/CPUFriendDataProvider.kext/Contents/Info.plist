@@ -28,6 +28,9 @@
 			<integer>1100</integer>
 			<key>IOProviderClass</key>
 			<string>IOACPIPlatformDevice</string>
+			<key>cf-frequency-data</key>
+			<data>
+			</data>
 		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
