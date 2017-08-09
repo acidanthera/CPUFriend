@@ -70,7 +70,7 @@ function main()
 			shift
 			if [[ -e "${1}" ]]; then
 				gCPUName="$(ioreg -p IODeviceTree -c IOACPIPlatformDevice -k cpu-type -k clock-frequency | egrep name | sed -e 's/ *[-|="<a-z>]//g')"
-				gCPURealName="$(echo ${gCPUName} | awk '{print $1}')"
+				gCPURealName="$(echo ${gCPUName[0]} | awk '{print $1}')"
 				gDataContent="$(xxd -pr -u "${1}" | tr -d '\n' | sed 's/.\{2\}/\0x&, /g')"
 				gSSDTContent=`cat <<EOF
 DefinitionBlock ("", "SSDT", 1, "APPLE ", "freqdata", 0x00000001)
