@@ -24,4 +24,6 @@ Use `CPUFriend/ResourceConverter.sh` to generate a working copy of either `CPUFr
 ````--acpi "file"````
 	Create `ssdt_data.dsl` with information provided by "file".
 
-NOTE: The created kext/ssdt is located in the current working directory.
+NOTE:
+- The created kext/ssdt is located in the current working directory.
+- The variable `"file"` should be a complete plist from `/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/Resources` with certain modifications instead of something like a raw `FrequencyVectors` entry.
