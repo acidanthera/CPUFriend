@@ -344,10 +344,10 @@
 					"$(PROJECT_DIR)/Lilu.kext/Contents/Resources/Library",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_NAME = as.vit9696.CPUFriend;
+				MODULE_NAME = org.vanilla.driver.CPUFriend;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
-				MODULE_VERSION = 1.0.0;
+				MODULE_VERSION = 1.0.1;
 				OTHER_CFLAGS = (
 					"-mmmx",
 					"-msse",
@@ -363,6 +363,7 @@
 				OTHER_LDFLAGS = "-static";
 				PRODUCT_BUNDLE_IDENTIFIER = org.vanilla.driver.CPUFriend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Debug;
@@ -370,12 +371,14 @@
 		1C748C331C21952C0024EED2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				COPY_PHASE_STRIP = YES;
 				CURRENT_PROJECT_VERSION = "$(MODULE_VERSION)";
 				DEAD_CODE_STRIPPING = YES;
 				DEPLOYMENT_POSTPROCESSING = YES;
 				GCC_ENABLE_FLOATING_POINT_LIBRARY_CALLS = NO;
 				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MODULE_VERSION=$(MODULE_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
@@ -388,10 +391,10 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_NAME = as.vit9696.CPUFriend;
+				MODULE_NAME = org.vanilla.driver.CPUFriend;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
-				MODULE_VERSION = 1.0.0;
+				MODULE_VERSION = 1.0.1;
 				OTHER_CFLAGS = (
 					"-mmmx",
 					"-msse",
@@ -408,6 +411,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = org.vanilla.driver.CPUFriend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_STYLE = "non-global";
+				VALID_ARCHS = x86_64;
 				WRAPPER_EXTENSION = kext;
 			};
 			name = Release;
