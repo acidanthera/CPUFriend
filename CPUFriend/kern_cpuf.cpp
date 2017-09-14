@@ -44,7 +44,8 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
           auto cpu = provider->getParentEntry(gIOServicePlane);
           if (cpu) {
             name = cpu->getName();
-            if (!name) name = "(null)";
+            if (!name)
+              name = "(null)";
             DBGLOG("cpuf @ looking for cf-frequency-data in %s", name);
             
             data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
