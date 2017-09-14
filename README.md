@@ -12,7 +12,7 @@ Note: ***Debug version of Lilu.kext should be put in the same folder as CPUFrien
 See [Instructions](https://github.com/PMheart/CPUFriend/blob/master/Instructions.md) for more details.
 
 #### Support and discussion
-I think only competent users should configure CPUFriend. I'm sorry that there's no support for the time being.
+No support provided for the time being, but I wish [Instructions](https://github.com/PMheart/CPUFriend/blob/master/Instructions.md) would somehow help you.
 
 #### Credits
 - [Apple](https://www.apple.com) for macOS  
