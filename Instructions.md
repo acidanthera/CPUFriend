@@ -50,7 +50,7 @@ NOTE:
             Return (Package () // Removed size
             {
                 "plugin-type", 
-                One
+                One,
 		
 		"cf-frequency-data", 
                 Buffer () // Removed size
