@@ -4,9 +4,9 @@ CPUFriend
 A [Lilu](https://github.com/vit9696/Lilu) plug-in kernel extension which injects power management data dynamically.
 
 #### Notes
-This repository should be compiled with [Lilu](https://github.com/vit9696/Lilu) ***v1.1.6*** and greater, otherwise the compilation will be failed!
+This repository should be compiled with [Lilu](https://github.com/vit9696/Lilu) ***v1.2.0*** and greater, otherwise the compilation will be failed!
 
-Note: ***Debug version of Lilu.kext should be put in the same folder as CPUFriend! And they should be also used together!***
+Note: ***Debug version of Lilu.kext should be put in the same folder as CPUFriend! And they should also be used together!***
 
 #### Configuration
 See [Instructions](https://github.com/PMheart/CPUFriend/blob/master/Instructions.md) for more details.
