@@ -21,7 +21,7 @@ static const char *symbolList[] {
 };
 
 static KernelPatcher::KextInfo kextList[] {
-  { idList[0], &binList[0], arrsize(binList), false, false, {}, KernelPatcher::KextInfo::Unloaded }
+  { idList[0], &binList[0], arrsize(binList), {false, false}, {}, KernelPatcher::KextInfo::Unloaded }
 };
 
 static constexpr size_t kextListSize {arrsize(kextList)};
