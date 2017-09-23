@@ -33,9 +33,8 @@
 		1CF01C901C8CF97F002DCEA3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		1CF01C921C8CF997002DCEA3 /* Changelog.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Changelog.md; sourceTree = "<group>"; };
 		1CF01C931C8DF02E002DCEA3 /* LICENSE.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE.txt; sourceTree = "<group>"; };
-		83023F371F3746B400850499 /* CPUFriendProvider.kext */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.kernel-extension"; name = CPUFriendProvider.kext; path = Extras/CPUFriendProvider.kext; sourceTree = "<group>"; };
 		83023F381F3747EC00850499 /* Instructions.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Instructions.md; sourceTree = "<group>"; };
-		83023F391F374BB600850499 /* ssdt_data.dsl */ = {isa = PBXFileReference; lastKnownFileType = text; name = ssdt_data.dsl; path = Extras/ssdt_data.dsl; sourceTree = "<group>"; };
+		CE2DC5071F7626EC004FAC48 /* ResourceConverter.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ResourceConverter.sh; sourceTree = "<group>"; };
 		CE405EBA1E49DD7100AA0B3D /* kern_compression.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_compression.hpp; sourceTree = "<group>"; };
 		CE405EBB1E49DD7100AA0B3D /* kern_disasm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_disasm.hpp; sourceTree = "<group>"; };
 		CE405EBC1E49DD7100AA0B3D /* kern_file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_file.hpp; sourceTree = "<group>"; };
@@ -71,8 +70,8 @@
 			isa = PBXGroup;
 			children = (
 				1CF01C911C8CF982002DCEA3 /* Docs */,
-				83023F361F3746A400850499 /* Extras */,
 				CE405EC81E49DD7B00AA0B3D /* SDK */,
+				CE2DC5061F7626EC004FAC48 /* ResourceConverter */,
 				1C748C291C21952C0024EED2 /* CPUFriend */,
 				1C748C281C21952C0024EED2 /* Products */,
 			);
@@ -124,13 +123,12 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		83023F361F3746A400850499 /* Extras */ = {
+		CE2DC5061F7626EC004FAC48 /* ResourceConverter */ = {
 			isa = PBXGroup;
 			children = (
-				83023F371F3746B400850499 /* CPUFriendProvider.kext */,
-				83023F391F374BB600850499 /* ssdt_data.dsl */,
+				CE2DC5071F7626EC004FAC48 /* ResourceConverter.sh */,
 			);
-			name = Extras;
+			path = ResourceConverter;
 			sourceTree = "<group>";
 		};
 		CE405EB91E49DD7100AA0B3D /* Headers */ = {

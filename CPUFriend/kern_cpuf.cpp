@@ -37,7 +37,7 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
         auto name = provider->getName();
         if (!name)
           name = "(null)";
-        DBGLOG("cpuf @ looking for cf-frequency-data in %s", name);
+        DBGLOG("cpuf", "looking for cf-frequency-data in %s", name);
         
         auto data = OSDynamicCast(OSData, provider->getProperty("cf-frequency-data"));
         if (!data) {
@@ -46,11 +46,11 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
             name = cpu->getName();
             if (!name)
               name = "(null)";
-            DBGLOG("cpuf @ looking for cf-frequency-data in %s", name);
+            DBGLOG("cpuf", "looking for cf-frequency-data in %s", name);
             
             data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
           } else {
-            SYSLOG("cpuf @ unable to access cpu parent");
+            DBGLOG("cpuf", "unable to access cpu parent");
           }
         }
         
@@ -58,11 +58,11 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
           callbackCpuf->frequencyDataSize = data->getLength();
           callbackCpuf->frequencyData = data->getBytesNoCopy();
         } else {
-          SYSLOG("cpuf @ failed to obtain cf-frequency-data");
+          DBGLOG("cpuf", "failed to obtain cf-frequency-data");
         }
       }
     } else {
-      SYSLOG("cpuf @ missing storage instance");
+      DBGLOG("cpuf", "missing storage instance");
     }
   }
   
@@ -78,7 +78,7 @@ bool CPUFriendPlugin::init() {
   }, this);
   
   if (error != LiluAPI::Error::NoError) {
-    SYSLOG("cpuf @ failed to register onKextLoad method %d", error);
+    DBGLOG("cpuf", "failed to register onKextLoad method %d", error);
     return false;
   }
 
@@ -90,17 +90,17 @@ void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_
     auto data = callbackCpuf->frequencyData;
     auto sz = callbackCpuf->frequencyDataSize;
     if (data && sz > 0) {
-      DBGLOG("cpuf @ feeding frequency data %u", sz);
+      DBGLOG("cpuf", "feeding frequency data %u", sz);
       resourceData = data;
       resourceDataLength = sz;
       result = kOSReturnSuccess;
     } else {
-      SYSLOG("cpuf @ failed to feed cpu data (%u, %d)", sz, data != nullptr);
+      DBGLOG("cpuf", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
     }
     
     callbackCpuf->orgConfigLoadCallback(requestTag, result, resourceData, resourceDataLength, context);
   } else {
-    SYSLOG("cpuf @ config callback arrived at nowhere");
+    DBGLOG("cpuf", "config callback arrived at nowhere");
   }
 }
 
@@ -108,19 +108,19 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
   if (progressState != cpufessingState::EverythingDone) {
     for (size_t i = 0; i < kextListSize; i++) {
       if (kextList[i].loadIndex == index) {
-        DBGLOG("cpuf @ current kext is %s progressState %d", kextList[i].id, progressState);
+        DBGLOG("cpuf", "current kext is %s progressState %d", kextList[i].id, progressState);
         
         if (!strcmp(kextList[i].id, idList[0])) {
           auto callback = patcher.solveSymbol(index, symbolList[0]);
           if (callback) {
             orgConfigLoadCallback = reinterpret_cast<t_callback>(patcher.routeFunction(callback, reinterpret_cast<mach_vm_address_t>(myConfigResourceCallback), true));
             if (patcher.getError() == KernelPatcher::Error::NoError) {
-              DBGLOG("cpuf @ routed %s", symbolList[0]);
+              DBGLOG("cpuf", "routed %s", symbolList[0]);
             } else {
-              SYSLOG("cpuf @ failed to route %s", symbolList[0]);
+              DBGLOG("cpuf", "failed to route %s", symbolList[0]);
             }
           } else {
-            SYSLOG("cpuf @ failed to find %s", symbolList[0]);
+            DBGLOG("cpuf", "failed to find %s", symbolList[0]);
           }
           
           progressState |= cpufessingState::CallbackRouted;
