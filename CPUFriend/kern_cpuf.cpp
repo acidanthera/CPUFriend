@@ -97,7 +97,6 @@ void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_
     } else {
       SYSLOG("myConfigResourceCallback", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
     }
-    
     callbackCpuf->orgConfigLoadCallback(requestTag, result, resourceData, resourceDataLength, context);
   } else {
     SYSLOG("myConfigResourceCallback", "config callback arrived at nowhere");
@@ -109,7 +108,8 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
     for (size_t i = 0; i < kextListSize; i++) {
       if (kextList[i].loadIndex == index) {
         DBGLOG("processKext", "current kext is %s progressState %d", kextList[i].id, progressState);
-        
+        // clear error from the very beginning just in case
+        patcher.clearError();
         if (!strcmp(kextList[i].id, idList[0])) {
           auto callback = patcher.solveSymbol(index, symbolList[0]);
           if (callback) {
@@ -122,7 +122,6 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
           } else {
             SYSLOG("processKext", "failed to find %s", symbolList[0]);
           }
-          
           progressState |= cpufessingState::CallbackRouted;
         }
         
