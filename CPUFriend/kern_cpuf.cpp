@@ -50,7 +50,7 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
             
             data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
           } else {
-            DBGLOG("probing", "unable to access cpu parent");
+            SYSLOG("probing", "unable to access cpu parent");
           }
         }
         
@@ -58,11 +58,11 @@ IOService *CPUFriendPlatform::probe(IOService *provider, SInt32 *score) {
           callbackCpuf->frequencyDataSize = data->getLength();
           callbackCpuf->frequencyData = data->getBytesNoCopy();
         } else {
-          DBGLOG("probing", "failed to obtain cf-frequency-data");
+          SYSLOG("probing", "failed to obtain cf-frequency-data");
         }
       }
     } else {
-      DBGLOG("probing", "missing storage instance");
+      SYSLOG("probing", "missing storage instance");
     }
   }
   
@@ -95,12 +95,12 @@ void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_
       resourceDataLength = sz;
       result = kOSReturnSuccess;
     } else {
-      DBGLOG("myConfigResourceCallback", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
+      SYSLOG("myConfigResourceCallback", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
     }
     
     callbackCpuf->orgConfigLoadCallback(requestTag, result, resourceData, resourceDataLength, context);
   } else {
-    DBGLOG("myConfigResourceCallback", "config callback arrived at nowhere");
+    SYSLOG("myConfigResourceCallback", "config callback arrived at nowhere");
   }
 }
 
@@ -117,10 +117,10 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
             if (patcher.getError() == KernelPatcher::Error::NoError) {
               DBGLOG("processKext", "routed %s", symbolList[0]);
             } else {
-              DBGLOG("processKext", "failed to route %s", symbolList[0]);
+              SYSLOG("processKext", "failed to route %s", symbolList[0]);
             }
           } else {
-            DBGLOG("processKext", "failed to find %s", symbolList[0]);
+            SYSLOG("processKext", "failed to find %s", symbolList[0]);
           }
           
           progressState |= cpufessingState::CallbackRouted;
