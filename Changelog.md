@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.1
+- Various typo fixes
+
 #### v1.1.0
 - Requires Lilu 1.2.0 or higher
 

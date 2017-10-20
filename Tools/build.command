@@ -8,19 +8,19 @@
 cd "$(dirname "$0")"/..
 
 if [[ ! -d Lilu.kext ]]; then
-  echo "Lilu.kext not found at repo dir, trying desktop"
-  if [[ -d ~/Desktop/Lilu.kext ]]; then
-    mv ~/Desktop/Lilu.kext Lilu.kext
-  else
-    echo "Lilu.kext still not found, exiting..."
-    exit 1
-  fi
+	echo "Lilu.kext not found at repo dir, trying desktop"
+	if [[ -d ~/Desktop/Lilu.kext ]]; then
+		mv ~/Desktop/Lilu.kext Lilu.kext
+	else
+		echo "Lilu.kext still not found, exiting..."
+		exit 1
+	fi
 fi
 
 TARGET=("Debug" "Release")
 
 for build in "${TARGET[@]}"; do
-  xcodebuild build -configuration "${build}"
+	xcodebuild build -configuration "${build}"
 done
 
 VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" build/Debug/CPUFriend.kext/Contents/Info.plist)

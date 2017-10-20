@@ -1,7 +1,7 @@
 CPUFriend
 =========
 
-A [Lilu](https://github.com/vit9696/Lilu) plug-in kernel extension which injects power management data dynamically.
+A [Lilu](https://github.com/vit9696/Lilu) plug-in for dynamic power management data injection.
 
 #### Notes
 This repository should be compiled with [Lilu](https://github.com/vit9696/Lilu) ***v1.2.0*** and greater, otherwise the compilation will be failed!
