@@ -9,43 +9,35 @@
 
 #include "CPUFriend.hpp"
 
-static const char * binList[] {
-	"/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin"
-};
-
-static const char * idList[] {
-	"com.apple.driver.X86PlatformPlugin"
-};
-
-static const char * symbolList[] {
-	"__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv"
-};
+static const char *kextX86PP[] = { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
+static const char *kextX86PPId = "com.apple.driver.X86PlatformPlugin";
 
 static KernelPatcher::KextInfo kextList[] {
-	{ idList[0], & binList[0], arrsize(binList), { false, false }, {}, KernelPatcher::KextInfo::Unloaded }
+	{ kextX86PPId, kextX86PP, arrsize(kextX86PP), {}, {}, KernelPatcher::KextInfo::Unloaded }
 };
 
 static constexpr size_t kextListSize = arrsize(kextList);
 
-static CPUFriendPlugin * callbackCpuf = nullptr;
+static CPUFriendPlugin *callbackCpuf = nullptr;
 
-OSDefineMetaClassAndStructors(CPUFriendPlatform, IOService)
+OSDefineMetaClassAndStructors(CPUFriendData, IOService)
 
-IOService * CPUFriendPlatform::probe(IOService * provider, SInt32 * score) {
+IOService *CPUFriendData::probe(IOService *provider, SInt32 *score)
+{
 	if (provider) {
 		if (callbackCpuf) {
-			if (! callbackCpuf->frequencyData) {
+			if (!callbackCpuf->frequencyData) {
 				auto name = provider->getName();
-				if (! name)
+				if (!name)
 					name = "(null)";
 				DBGLOG("probe", "looking for cf-frequency-data in %s", name);
 				
 				auto data = OSDynamicCast(OSData, provider->getProperty("cf-frequency-data"));
-				if (! data) {
+				if (!data) {
 					auto cpu = provider->getParentEntry(gIOServicePlane);
 					if (cpu) {
 						name = cpu->getName();
-						if (! name)
+						if (!name)
 							name = "(null)";
 						DBGLOG("probe", "looking for cf-frequency-data in %s", name);
 						data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
@@ -68,11 +60,12 @@ IOService * CPUFriendPlatform::probe(IOService * provider, SInt32 * score) {
 	return nullptr;
 }
 
-bool CPUFriendPlugin::init() {
+bool CPUFriendPlugin::init()
+{
 	callbackCpuf = this;
 	
-	LiluAPI::Error error = lilu.onKextLoad(kextList, kextListSize, [](void * user, KernelPatcher & patcher, size_t index, mach_vm_address_t address, size_t size) {
-		static_cast<CPUFriendPlugin * >(user)->processKext(patcher, index, address, size);
+	LiluAPI::Error error = lilu.onKextLoad(kextList, kextListSize, [](void *user, KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
+		static_cast<CPUFriendPlugin *>(user)->processKext(patcher, index, address, size);
 	}, this);
 	
 	if (error != LiluAPI::Error::NoError) {
@@ -83,7 +76,8 @@ bool CPUFriendPlugin::init() {
 	return true;
 }
 
-void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void * resourceData, uint32_t resourceDataLength, void * context) {
+void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
+{
 	if (callbackCpuf && callbackCpuf->orgConfigLoadCallback) {
 		auto data = callbackCpuf->frequencyData;
 		auto sz = callbackCpuf->frequencyDataSize;
@@ -101,24 +95,25 @@ void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_
 	}
 }
 
-void CPUFriendPlugin::processKext(KernelPatcher & patcher, size_t index, mach_vm_address_t address, size_t size) {
+void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size)
+{
 	if (progressState != ProcessingState::EverythingDone) {
 		for (size_t i = 0; i < kextListSize; i++) {
 			if (kextList[i].loadIndex == index) {
 				DBGLOG("processKext", "current kext is %s progressState %d", kextList[i].id, progressState);
 				// clear error from the very beginning just in case
 				patcher.clearError();
-				if (! strcmp(kextList[i].id, idList[0])) {
-					auto callback = patcher.solveSymbol(index, symbolList[0]);
+				if (!strcmp(kextList[i].id, kextX86PPId)) {
+					auto callback = patcher.solveSymbol(index, "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
 					if (callback) {
 						orgConfigLoadCallback = reinterpret_cast<t_callback>(patcher.routeFunction(callback, reinterpret_cast<mach_vm_address_t>(myConfigResourceCallback), true));
 						if (patcher.getError() == KernelPatcher::Error::NoError) {
-							DBGLOG("processKext", "routed %s", symbolList[0]);
+							DBGLOG("processKext", "routed %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
 						} else {
-							SYSLOG("processKext", "failed to route %s", symbolList[0]);
+							SYSLOG("processKext", "failed to route %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
 						}
 					} else {
-						SYSLOG("processKext", "failed to find %s", symbolList[0]);
+						SYSLOG("processKext", "failed to find %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
 					}
 					progressState |= ProcessingState::CallbackRouted;
 				}

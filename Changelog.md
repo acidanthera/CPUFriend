@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.2
+- Code style changed
+
 #### v1.1.1
 - Various typo fixes
 

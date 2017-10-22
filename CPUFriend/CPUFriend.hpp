@@ -11,10 +11,10 @@
 #include <Headers/kern_patcher.hpp>
 #include <Library/LegacyIOService.h>
 
-class EXPORT CPUFriendPlatform : public IOService {
-	OSDeclareDefaultStructors(CPUFriendPlatform)
+class EXPORT CPUFriendData : public IOService {
+	OSDeclareDefaultStructors(CPUFriendData)
 public:
-	IOService * probe(IOService * provider, SInt32 *score) override;
+	IOService *probe(IOService *provider, SInt32 *score) override;
 };
 
 class CPUFriendPlugin {
@@ -34,7 +34,7 @@ class CPUFriendPlugin {
 		/**
 		 *  Loaded user-specified frequency data
 		 */
-		const void * frequencyData = nullptr;
+		const void *frequencyData = nullptr;
 		
 		/**
 		 *  Loaded user-specified frequency data size
@@ -45,7 +45,7 @@ class CPUFriendPlugin {
 		/**
 		 *  Hooked ResourceLoad callback returning user-specified platform data
 		 */
-		static void myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void * resourceData, uint32_t resourceDataLength, void * context);
+		static void myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
 		
 		/**
 		 *  Patch kext if needed and prepare other patches
@@ -55,7 +55,7 @@ class CPUFriendPlugin {
 		 *  @param address kinfo load address
 		 *  @param size    kinfo memory size
 		 */
-		void processKext(KernelPatcher & patcher, size_t index, mach_vm_address_t address, size_t size);
+		void processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
 		
 		/**
 		 *  Current progress mask
