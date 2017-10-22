@@ -40,7 +40,7 @@
 			<key>CFBundleIdentifier</key>
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>IOClass</key>
-			<string>CPUFriendPlatform</string>
+			<string>CPUFriendData</string>
 			<key>IOParentMatch</key>
 			<dict>
 				<key>IOPropertyMatch</key>
