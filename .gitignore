@@ -8,3 +8,6 @@ CPUFriend.xcodeproj/xcuserdata
 CPUFriend.xcodeproj/project.xcworkspace/xcuserdata
 
 Lilu.kext/*
+
+*.RELEASE.zip
+*.DEBUG.zip
