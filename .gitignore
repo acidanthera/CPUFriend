@@ -1,0 +1,10 @@
+.DS_Store
+
+CPUFriend/.DS_Store
+
+Tools/.DS_Store
+
+CPUFriend.xcodeproj/xcuserdata
+CPUFriend.xcodeproj/project.xcworkspace/xcuserdata
+
+Lilu.kext/*
