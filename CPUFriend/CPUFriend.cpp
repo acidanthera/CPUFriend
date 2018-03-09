@@ -10,10 +10,13 @@
 #include "CPUFriend.hpp"
 
 static const char *kextX86PP[] = { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
-static const char *kextX86PPId = "com.apple.driver.X86PlatformPlugin";
+
+enum : size_t {
+	KextX86
+};
 
 static KernelPatcher::KextInfo kextList[] {
-	{ kextX86PPId, kextX86PP, arrsize(kextX86PP), {}, {}, KernelPatcher::KextInfo::Unloaded }
+	{ "com.apple.driver.X86PlatformPlugin", kextX86PP, arrsize(kextX86PP), {}, {}, KernelPatcher::KextInfo::Unloaded }
 };
 
 static constexpr size_t kextListSize = arrsize(kextList);
@@ -103,15 +106,15 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
 				DBGLOG("processKext", "current kext is %s progressState %d", kextList[i].id, progressState);
 				// clear error from the very beginning just in case
 				patcher.clearError();
-				if (!strcmp(kextList[i].id, kextX86PPId)) {
+				if (i == KextX86) {
 					auto callback = patcher.solveSymbol(index, "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
 					if (callback) {
 						orgConfigLoadCallback = reinterpret_cast<t_callback>(patcher.routeFunction(callback, reinterpret_cast<mach_vm_address_t>(myConfigResourceCallback), true));
-						if (patcher.getError() == KernelPatcher::Error::NoError) {
+						
+						if (patcher.getError() == KernelPatcher::Error::NoError)
 							DBGLOG("processKext", "routed %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
-						} else {
+						else
 							SYSLOG("processKext", "failed to route %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
-						}
 					} else {
 						SYSLOG("processKext", "failed to find %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
 					}
