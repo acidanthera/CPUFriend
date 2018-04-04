@@ -107,7 +107,7 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
 				// clear error from the very beginning just in case
 				patcher.clearError();
 				if (i == KextX86) {
-					auto callback = patcher.solveSymbol(index, "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
+					auto callback = patcher.solveSymbol(index, "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv", address, size);
 					if (callback) {
 						orgConfigLoadCallback = reinterpret_cast<t_callback>(patcher.routeFunction(callback, reinterpret_cast<mach_vm_address_t>(myConfigResourceCallback), true));
 						
