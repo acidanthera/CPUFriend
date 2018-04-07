@@ -1,5 +1,9 @@
 CPUFriend Changelog
 ===================
+#### v1.1.3
+- Added Lilu 1.2.3 compatibility
+- Requires Lilu 1.2.3 or higher
+
 #### v1.1.2
 - Code style changed
 
