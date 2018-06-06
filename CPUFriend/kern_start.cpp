@@ -35,7 +35,7 @@ PluginConfiguration ADDPR(config) {
 	bootargBeta,
 	arrsize(bootargBeta),
 	KernelVersion::MountainLion,
-	KernelVersion::HighSierra,
+	KernelVersion::Mojave,
 	[]() {
 		cpuf.init();
 	}
