@@ -79,6 +79,12 @@ bool CPUFriendPlugin::init()
 	return true;
 }
 
+//
+// TO-DO:
+//    Should we also add support for the old ACPI_SMC_Plugin?
+//    Since massive CPU support has been dropped in 10.14 pre-release, (Although they have not done it for now)
+//    we shall keep monitoring how everything goes then.
+//
 void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
 {
 	if (callbackCpuf && callbackCpuf->orgConfigLoadCallback) {
