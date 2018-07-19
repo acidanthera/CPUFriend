@@ -1,5 +1,9 @@
 CPUFriend Changelog
 ===================
+#### v1.1.4
+- Sync with Lilu 1.2.5
+- Native macOS 10.14 support
+
 #### v1.1.3
 - Added Lilu 1.2.3 compatibility
 - Requires Lilu 1.2.3 or higher
