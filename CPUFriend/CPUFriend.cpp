@@ -82,23 +82,38 @@ bool CPUFriendPlugin::init()
 	return true;
 }
 
-void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
+void CPUFriendPlugin::updateResource(kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength)
 {
-	if (callbackCpuf && callbackCpuf->orgConfigLoadCallback) {
-		auto data = callbackCpuf->frequencyData;
-		auto sz = callbackCpuf->frequencyDataSize;
-		if (data && sz > 0) {
-			DBGLOG("myConfigResourceCallback", "feeding frequency data %u", sz);
-			resourceData = data;
-			resourceDataLength = sz;
-			result = kOSReturnSuccess;
+		if (callbackCpuf) {
+			auto data = callbackCpuf->frequencyData;
+			auto sz   = callbackCpuf->frequencyDataSize;
+			if (data && sz > 0) {
+				DBGLOG("updateResource", "feeding frequency data %u", sz);
+				resourceData = data;
+				resourceDataLength = sz;
+				result = kOSReturnSuccess;
+			} else {
+				SYSLOG("updateResource", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
+			}
 		} else {
-			SYSLOG("myConfigResourceCallback", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
+			SYSLOG("updateResource", "config callback arrived at nowhere");
 		}
-		callbackCpuf->orgConfigLoadCallback(requestTag, result, resourceData, resourceDataLength, context);
-	} else {
-		SYSLOG("myConfigResourceCallback", "config callback arrived at nowhere");
-	}
+}
+
+void CPUFriendPlugin::myACPISMCConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
+{
+	DBGLOG("cpuf", "myACPISMCConfigResourceCallback %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	callbackCpuf->updateResource(result, resourceData, resourceDataLength);
+	DBGLOG("cpuf", "myACPISMCConfigResourceCallback done %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	FunctionCast(myACPISMCConfigResourceCallback, callbackCpuf->orgACPISMCConfigLoadCallback)(requestTag, result, resourceData, resourceDataLength, context);
+}
+
+void CPUFriendPlugin::myX86PPConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
+{
+	DBGLOG("cpuf", "myX86PPConfigResourceCallback %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	callbackCpuf->updateResource(result, resourceData, resourceDataLength);
+	DBGLOG("cpuf", "myX86PPConfigResourceCallback done %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	FunctionCast(myX86PPConfigResourceCallback, callbackCpuf->orgX86PPConfigLoadCallback)(requestTag, result, resourceData, resourceDataLength, context);
 }
 
 void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size)
@@ -110,20 +125,16 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
 				// clear error from the very beginning just in case
 				patcher.clearError();
 				
-				if (i == KextX86PP || i == KextACPISMC) {
-					const char *symbol = i == KextX86PP ? "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv" : "__ZL22configResourceCallbackjiPKvjPv";
+				if (i == KextACPISMC || i == KextX86PP) {
+					callbackCpuf = this;
 					
-					auto callback = patcher.solveSymbol(index, symbol, address, size);
-					if (callback) {
-						orgConfigLoadCallback = reinterpret_cast<t_callback>(patcher.routeFunction(callback, reinterpret_cast<mach_vm_address_t>(myConfigResourceCallback), true));
-						
-						if (patcher.getError() == KernelPatcher::Error::NoError)
-							DBGLOG("processKext", "routed %s", symbol);
-						else
-							SYSLOG("processKext", "failed to route %s", symbol);
-					} else {
-						SYSLOG("processKext", "failed to find %s", symbol);
-					}
+					KernelPatcher::RouteRequest requests[] {
+						KernelPatcher::RouteRequest("__ZL22configResourceCallbackjiPKvjPv", myACPISMCConfigResourceCallback, orgACPISMCConfigLoadCallback),
+						KernelPatcher::RouteRequest("__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv", myX86PPConfigResourceCallback, orgX86PPConfigLoadCallback)
+					};
+					
+					patcher.routeMultiple(index, requests, address, size);
+					
 					progressState |= ProcessingState::CallbackRouted;
 				}
 			}

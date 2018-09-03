@@ -22,16 +22,6 @@ class CPUFriendPlugin {
 		bool init();
 		
 		/**
-		 *  ResourceLoad callback type
-		 */
-		using t_callback = void (*)(uint32_t, kern_return_t, const void *, uint32_t, void *);
-		
-		/**
-		 *  Trampolines for original resource load callback
-		 */
-		t_callback orgConfigLoadCallback = nullptr;
-		
-		/**
 		 *  Loaded user-specified frequency data
 		 */
 		const void *frequencyData = nullptr;
@@ -42,6 +32,12 @@ class CPUFriendPlugin {
 		uint32_t frequencyDataSize = 0;
 
 	private:
+		/**
+		 *  Trampolines for original resource load callback
+		 */
+		mach_vm_address_t orgACPISMCConfigLoadCallback {0};
+		mach_vm_address_t orgX86PPConfigLoadCallback   {0};
+	
 		/**
 		 *  Hooked ResourceLoad callback returning user-specified platform data
 		 */
