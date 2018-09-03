@@ -84,20 +84,20 @@ bool CPUFriendPlugin::init()
 
 void CPUFriendPlugin::updateResource(kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength)
 {
-		if (callbackCpuf) {
-			auto data = callbackCpuf->frequencyData;
-			auto sz   = callbackCpuf->frequencyDataSize;
-			if (data && sz > 0) {
-				DBGLOG("updateResource", "feeding frequency data %u", sz);
-				resourceData = data;
-				resourceDataLength = sz;
-				result = kOSReturnSuccess;
-			} else {
-				SYSLOG("updateResource", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
-			}
+	if (callbackCpuf) {
+		auto data = callbackCpuf->frequencyData;
+		auto sz   = callbackCpuf->frequencyDataSize;
+		if (data && sz > 0) {
+			DBGLOG("updateResource", "feeding frequency data %u", sz);
+			resourceData = data;
+			resourceDataLength = sz;
+			result = kOSReturnSuccess;
 		} else {
-			SYSLOG("updateResource", "config callback arrived at nowhere");
+			SYSLOG("updateResource", "failed to feed cpu data (%u, %d)", sz, data != nullptr);
 		}
+	} else {
+		SYSLOG("updateResource", "config callback arrived at nowhere");
+	}
 }
 
 void CPUFriendPlugin::myACPISMCConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
