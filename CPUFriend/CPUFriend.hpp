@@ -45,7 +45,7 @@ class CPUFriendPlugin {
 		static void myX86PPConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
 	
 		/**
-		 *	Update resource request parameters with hooked data if necessary
+		 *  Update resource request parameters with hooked data if necessary
 		 *
 		 *  @param result             kOSReturnSuccess on resource update
 		 *  @param resourceData       resource data reference
