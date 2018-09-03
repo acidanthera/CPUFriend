@@ -9,13 +9,16 @@
 
 #include "CPUFriend.hpp"
 
+static const char *kextACPISMC[] = { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/ACPI_SMC_PlatformPlugin.kext/Contents/MacOS/ACPI_SMC_PlatformPlugin" };
 static const char *kextX86PP[] = { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
 
 enum : size_t {
-	KextX86
+	KextACPISMC,
+	KextX86PP
 };
 
 static KernelPatcher::KextInfo kextList[] {
+	{ "com.apple.driver.ACPI_SMC_PlatformPlugin", kextACPISMC, arrsize(kextACPISMC), {}, {}, KernelPatcher::KextInfo::Unloaded },
 	{ "com.apple.driver.X86PlatformPlugin", kextX86PP, arrsize(kextX86PP), {}, {}, KernelPatcher::KextInfo::Unloaded }
 };
 
@@ -79,12 +82,6 @@ bool CPUFriendPlugin::init()
 	return true;
 }
 
-//
-// TO-DO:
-//    Should we also add support for the old ACPI_SMC_Plugin?
-//    Since massive CPU support has been dropped in 10.14 pre-release, (Although they have not done it for now)
-//    we shall keep monitoring how everything goes then.
-//
 void CPUFriendPlugin::myConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
 {
 	if (callbackCpuf && callbackCpuf->orgConfigLoadCallback) {
@@ -112,23 +109,27 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
 				DBGLOG("processKext", "current kext is %s progressState %d", kextList[i].id, progressState);
 				// clear error from the very beginning just in case
 				patcher.clearError();
-				if (i == KextX86) {
-					auto callback = patcher.solveSymbol(index, "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv", address, size);
+				
+				if (i == KextX86PP || i == KextACPISMC) {
+					const char *symbol = i == KextX86PP ? "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv" : "__ZL22configResourceCallbackjiPKvjPv";
+					
+					auto callback = patcher.solveSymbol(index, symbol, address, size);
 					if (callback) {
 						orgConfigLoadCallback = reinterpret_cast<t_callback>(patcher.routeFunction(callback, reinterpret_cast<mach_vm_address_t>(myConfigResourceCallback), true));
 						
 						if (patcher.getError() == KernelPatcher::Error::NoError)
-							DBGLOG("processKext", "routed %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
+							DBGLOG("processKext", "routed %s", symbol);
 						else
-							SYSLOG("processKext", "failed to route %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
+							SYSLOG("processKext", "failed to route %s", symbol);
 					} else {
-						SYSLOG("processKext", "failed to find %s", "__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv");
+						SYSLOG("processKext", "failed to find %s", symbol);
 					}
 					progressState |= ProcessingState::CallbackRouted;
 				}
 			}
 		}
 	}
+	
 	// Ignore all the errors for other processors
 	patcher.clearError();
 }

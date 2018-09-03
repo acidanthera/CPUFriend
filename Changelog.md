@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.5
+- Support for the old ACPI_SMC_Plugin (as claimed in TO-DO)
+
 #### v1.1.4
 - Sync with Lilu 1.2.5
 - Native macOS 10.14 support
