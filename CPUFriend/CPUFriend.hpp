@@ -18,62 +18,62 @@ public:
 };
 
 class CPUFriendPlugin {
-	public:
-		bool init();
-		
-		/**
-		 *  Loaded user-specified frequency data
-		 */
-		const void *frequencyData = nullptr;
-		
-		/**
-		 *  Loaded user-specified frequency data size
-		 */
-		uint32_t frequencyDataSize = 0;
-
-	private:
-		/**
-		 *  Trampolines for original resource load callback
-		 */
-		mach_vm_address_t orgACPISMCConfigLoadCallback {0};
-		mach_vm_address_t orgX86PPConfigLoadCallback   {0};
+public:
+	bool init();
 	
-		/**
-		 *  Hooked ResourceLoad callback returning user-specified platform data
-		 */
-		static void myACPISMCConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
-		static void myX86PPConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
+	/**
+	 *  Loaded user-specified frequency data
+	 */
+	const void *frequencyData = nullptr;
 	
-		/**
-		 *  Update resource request parameters with hooked data if necessary
-		 *
-		 *  @param result             kOSReturnSuccess on resource update
-		 *  @param resourceData       resource data reference
-		 *  @param resourceDataLength resource data length reference
-		 */
-		void updateResource(kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength);
+	/**
+	 *  Loaded user-specified frequency data size
+	 */
+	uint32_t frequencyDataSize = 0;
 
-		/**
-		 *  Patch kext if needed and prepare other patches
-		 *
-		 *  @param patcher KernelPatcher instance
-		 *  @param index   kinfo handle
-		 *  @param address kinfo load address
-		 *  @param size    kinfo memory size
-		 */
-		void processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
-		
-		/**
-		 *  Current progress mask
-		 */
-		struct ProcessingState {
-			enum : uint32_t {
-				NothingReady   = 0,
-				CallbackRouted = 1,
-				EverythingDone = CallbackRouted
-			};
+private:
+	/**
+	 *  Trampolines for original resource load callback
+	 */
+	mach_vm_address_t orgACPISMCConfigLoadCallback {0};
+	mach_vm_address_t orgX86PPConfigLoadCallback   {0};
+
+	/**
+	 *  Hooked ResourceLoad callback returning user-specified platform data
+	 */
+	static void myACPISMCConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
+	static void myX86PPConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
+
+	/**
+	 *  Update resource request parameters with hooked data if necessary
+	 *
+	 *  @param result             kOSReturnSuccess on resource update
+	 *  @param resourceData       resource data reference
+	 *  @param resourceDataLength resource data length reference
+	 */
+	void updateResource(kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength);
+
+	/**
+	 *  Patch kext if needed and prepare other patches
+	 *
+	 *  @param patcher KernelPatcher instance
+	 *  @param index   kinfo handle
+	 *  @param address kinfo load address
+	 *  @param size    kinfo memory size
+	 */
+	void processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
+	
+	/**
+	 *  Current progress mask
+	 */
+	struct ProcessingState {
+		enum : uint32_t {
+			NothingReady   = 0,
+			CallbackRouted = 1,
+			EverythingDone = CallbackRouted
 		};
-		uint32_t progressState = ProcessingState::NothingReady;
+	};
+	uint32_t progressState = ProcessingState::NothingReady;
 };
 
 #endif /* kern_cpuf_hpp */
