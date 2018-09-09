@@ -62,18 +62,6 @@ private:
 	 *  @param size    kinfo memory size
 	 */
 	void processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
-	
-	/**
-	 *  Current progress mask
-	 */
-	struct ProcessingState {
-		enum : uint32_t {
-			NothingReady   = 0,
-			CallbackRouted = 1,
-			EverythingDone = CallbackRouted
-		};
-	};
-	uint32_t progressState = ProcessingState::NothingReady;
 };
 
 #endif /* kern_cpuf_hpp */

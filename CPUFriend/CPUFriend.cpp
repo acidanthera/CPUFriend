@@ -71,14 +71,10 @@ bool CPUFriendPlugin::init()
 {
 	callbackCpuf = this;
 	
-	LiluAPI::Error error = lilu.onKextLoad(kextList, kextListSize, [](void *user, KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
+	lilu.onKextLoadForce(kextList, kextListSize,
+	[](void *user, KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
 		static_cast<CPUFriendPlugin *>(user)->processKext(patcher, index, address, size);
 	}, this);
-	
-	if (error != LiluAPI::Error::NoError) {
-		SYSLOG("cpuf", "failed to register onKextLoad method %d", error);
-		return false;
-	}
 
 	return true;
 }
@@ -119,27 +115,17 @@ void CPUFriendPlugin::myX86PPConfigResourceCallback(uint32_t requestTag, kern_re
 
 void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size)
 {
-	if (progressState != ProcessingState::EverythingDone) {
-		for (size_t i = 0; i < kextListSize; i++) {
-			if (kextList[i].loadIndex == index) {
-				DBGLOG("cpuf", "current kext is %s progressState %d", kextList[i].id, progressState);
-				// clear error from the very beginning just in case
-				patcher.clearError();
-				
-				if (i == KextACPISMC || i == KextX86PP) {
-					KernelPatcher::RouteRequest requests[] {
-						KernelPatcher::RouteRequest("__ZL22configResourceCallbackjiPKvjPv", myACPISMCConfigResourceCallback, orgACPISMCConfigLoadCallback),
-						KernelPatcher::RouteRequest("__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv", myX86PPConfigResourceCallback, orgX86PPConfigLoadCallback)
-					};
-					
-					patcher.routeMultiple(index, requests, address, size);
-					
-					progressState |= ProcessingState::CallbackRouted;
-				}
-			}
-		}
+	if (kextList[KextACPISMC].loadIndex == index) {
+		DBGLOG("cpuf", "patching KextACPISMC");
+		KernelPatcher::RouteRequest request("__ZL22configResourceCallbackjiPKvjPv",
+											myACPISMCConfigResourceCallback,
+											orgACPISMCConfigLoadCallback);
+		patcher.routeMultiple(index, &request, 1, address, size);
+	} else if (kextList[KextX86PP].loadIndex == index) {
+		DBGLOG("cpuf", "patching KextX86PP");
+		KernelPatcher::RouteRequest request("__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv",
+											myX86PPConfigResourceCallback,
+											orgX86PPConfigLoadCallback);
+		patcher.routeMultiple(index, &request, 1, address, size);
 	}
-	
-	// Ignore all the errors for other processors
-	patcher.clearError();
 }

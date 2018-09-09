@@ -7,7 +7,9 @@ Tools/.DS_Store
 CPUFriend.xcodeproj/xcuserdata
 CPUFriend.xcodeproj/project.xcworkspace/xcuserdata
 
-Lilu.kext/*
+Lilu.kext
 
 *.RELEASE.zip
 *.DEBUG.zip
+
+DerivedData
