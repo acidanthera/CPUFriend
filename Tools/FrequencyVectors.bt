@@ -1,0 +1,252 @@
+/**
+ *   010 Editor v8.0.1 Binary Template
+ *
+ *      File: X86PlatformPlugin.kext resources (IOPlatformPluginFamily.kext)
+ *   Authors: vit9696
+ *   Version: 0.1
+ *   Purpose: Intel XCPM Frequency and IOPMSystemSleepPolicyVariables Decoding
+ *
+ * Copyright (c) 2018 vit9696
+ *
+ * Thanks to Apple for XNU Debug Information <3.
+ */
+
+LittleEndian();
+
+typedef unsigned char uint8_t;
+typedef uint16 uint16_t;
+typedef uint32 uint32_t;
+typedef uint64 uint64_t;
+
+enum {
+  /* Calls FreeStats(cmd, data) */
+  LEGACY_PM_FREE_STATS             = 0x20005001,
+  /* Calls pmProcessor->EnableCStateLimit(1) */
+  LEGACY_ENABLE_PSTATE_LIMIT_1     = 0x20005022,
+  /* Calls pmProcessor->EnableCStateLimit(0) */
+  LEGACY_ENABLE_PSTATE_LIMIT_0     = 0x20005023,
+  /* Calls i386_pmsStart(cmd, data) */
+  LEGACY_PM_START                  = 0x20005032,
+  /* Calls i386_pmsPark -> pmStopCPU */
+  LEGACY_PM_PSTATE_RESET           = 0x20005033,
+  /* Calls i386_pmsPark -> pmStopCPU and then i386_SetPState(501) */
+  LEGACY_PM_PSTATE_501             = 0x20005035,
+  /* Calls i386_pmsPark -> pmStopCPU and then i386_SetPState(500) */
+  LEGACY_PM_PSTATE_500             = 0x20005036,
+  /* Calls i386_pmsSleep -> pmStopCPU */
+  LEGACY_PM_SLEEP                  = 0x20005037,
+  /* Calls i386_pmsPark -> pmStopCPU, supposedly EXIT */
+  LEGACY_PM_PSTATE_RESET2          = 0x20005039,
+  /* Calls pmSetTurboHWState(15) */
+  LEGACY_PM_SET_TURBO_HWSTATE_15   = 0x20005045,
+  /* Calls mCPUStepperStart(cmd, data) */
+  LEGACY_PM_STEPPER_START          = 0x20005071,
+  /* Calls pmCPUStepperStop(cmd, data) */
+  LEGACY_PM_STEPPER_STOP           = 0x20005072,
+  /* Calls pmInitStepperTests and tests */
+  LEGACY_PM_RUN_TESTS              = 0x200050B9,
+  /* Calls pmCPUStepperCopyOriginalProgram(cmd, data) */
+  LEGACY_PM_COPY_ORIGINAL_PROGRAM  = 0x20005073,
+  /* Unimplemented for any processor */
+  LEGACY_PM_UKNOWN_OFF160          = 0x80085004,
+  /* Contains number of CPUs and something else */
+  LEGACY_PM_GET_CPUINFO            = 0x80085005,
+  /* Sets HPET parameters */
+  LEGACY_PM_SET_HPETINFO           = 0x80085007,
+  /* Sets CSTATES and PSTATES to enabled */
+  LEGACY_PM_ENABLE_STATES          = 0x80085009,
+  /* Sets CSTATES and PSTATES to enabled */
+  LEGACY_PM_DISABLE_STATES         = 0x8008500A,
+
+
+  SEND_PSTATE_TABLE_INFO_AICPM_1 = 0x800850A2,
+  SEND_PSTATE_TABLE_INFO_AICPM_2 = 0x800850C3,
+
+  /* TODO: continue */
+
+  /* Calls xcpm_ioctl_get_version */
+  XCPM_GET_VERSION                 = 0xC0045800,
+  /* Calls xcpm_ioctl_set_thermal_levels */
+  XCPM_SET_THERMAL_LEVELS          = 0xC0045814,
+  /* Calls xcpm_ioctl_get_thermal_levels */
+  XCPM_GET_THERMAL_LEVELS          = 0xC0045815,
+  /* Calls xcpm_ioctl_set_min_thermal_levels */
+  XCPM_SET_MIN_THERMAL_LEVELS      = 0xC0045818,
+  /* Calls xcpm_ioctl_get_min_thermal_levels */
+  XCPM_GET_MIN_THERMAL_LEVELS      = 0xC0045819,
+  /* Calls xcpm_ioctl_poll_thermal_levels */
+  XCPM_POLL_THERMAL_LEVELS         = 0xC004581A,
+  /* Calls xcpm_ioctl_set_qos_thermal_thresholds */
+  XCPM_SET_QOS_THERMAL_THRESHOLDS  = 0xC004581B,
+  /* Calls xcpm_ioctl_get_qos_thermal_thresholds */
+  XCPM_GET_QOS_THERMAL_THRESHOLDS  = 0xC004581C,
+  /* Calls xcpm_ioctl_ui_boost_enable */
+  XCPM_UI_BOOST_ENABLE             = 0xC004581E,
+  /* Calls xcpm_ioctl_set_power_source */
+  XCPM_SET_POWER_SOURCE            = 0xC004581F,
+  /* Calls xcpm_ioctl_get_pstate_limits for PL_SMC_STD */
+  XCPM_GET_PSTATE_LIMITS_SMC_STD   = 0xC0085802,
+  /* Calls xcpm_ioctl_set_pstate_limits for PL_SMC_STD */
+  XCPM_SET_PSTATE_LIMITS_SMC_STD   = 0xC0085803,
+  /* Calls xcpm_ioctl_get_forced_idle */
+  XCPM_GET_FORCED_IDLE             = 0xC008580A,
+  /* Calls xcpm_ioctl_set_forced_idle */
+  XCPM_SET_FORCED_IDLE             = 0xC008580B,
+  /* Calls xcpm_ioctl_get_pstate_limits for PL_TOOL_SOFT */
+  XCPM_GET_PSTATE_LIMITS_TOOL_SOFT = 0xC0085810,
+  /* Calls xcpm_ioctl_set_pstate_limits for PL_TOOL_SOFT */
+  XCPM_SET_PSTATE_LIMITS_TOOL_SOFT = 0xC0085811,
+  /* Calls xcpm_ioctl_get_pstate_limits for PL_SMC_BOOST */
+  XCPM_GET_PSTATE_LIMITS_SMC_BOOST = 0xC0085820,
+  /* Calls xcpm_ioctl_set_pstate_limits for PL_SMC_BOOST */
+  XCPM_SET_PSTATE_LIMITS_SMC_BOOST = 0xC0085821,
+  /* Calls xcpm_ioctl_get_cstate_info */
+  XCPM_GET_CSTATE_INFO             = 0xC0155804,
+  /* Calls xcpm_ioctl_set_cstate_info */
+  XCPM_SET_CSTATE_INFO             = 0xC0155805,
+  /* Calls xcpm_ioctl_get_limit_stats */
+  XCPM_GET_LIMIT_STATS             = 0xC0185813,
+  /* Calls xcpm_ioctl_ws_stat_update */
+  XCPM_WS_STAT_UPDATE              = 0xC030581D,
+  /* Calls xcpm_ioctl_get_pstate_table */
+  XCPM_GET_PSTATE_TABLE            = 0x20005801,
+  /* Calls xcpm_ioctl_get_freq_vectors */
+  XCPM_GET_FREQUENCY_VECTORS       = 0x20005806,
+  /* Calls xcpm_ioctl_set_freq_vectors */
+  XCPM_SET_FREQUENCY_VECTORS       = 0x20005807,
+  /* Calls xcpm_dvfs_pause */
+  XCPM_DVFS_PAUSE                  = 0x20005808,
+  /* Calls xcpm_dvfs_resume */
+  XCPM_DVFS_RESUME                 = 0x20005809,
+  /* Calls xcpm_ioctl_get_pstate_ctrs */
+  XCPM_GET_PSTATE_CTRS             = 0x2000580D,
+  /* Calls xcpm_enable_pstate_ctrs */
+  XCPM_ENABLE_PSTATE_CTRS          = 0x2000580E,
+  /* Calls xcpm_ioctl_set_pstate_table */
+  XCPM_SET_PSTATE_TABLE            = 0x2000580F,
+  /* Calls xcpm_ioctl_get_cpu_status */
+  XCPM_GET_CPU_STATUS              = 0x20005812,
+  /* Calls xcpm_ioctl_get_qos_names */
+  XCPM_GET_QOS_NAMES               = 0x20005816,
+  /* Calls xcpm_ioctl_get_qos_times */
+  XCPM_SET_QOS_TIMES               = 0x20005817,
+
+};
+
+enum xcpmio_fv_t {
+  XCPMIO_FV_NONE = 0x0,
+  XCPMIO_FV_ABSOLUTE = 0x1,
+  XCPMIO_FV_NON_TURBO_PCT = 0x2,
+  XCPMIO_FV_TURBO_PCT = 0x3,
+  XCPMIO_FV_LPM_PCT = 0x4,
+  XCPMIO_FMAX_VMIN = 0x5,
+};
+
+typedef struct xcpmio_idle {
+  uint64_t idle_duration;
+  uint8_t idle_next;
+  uint8_t idle_scale_percent;
+} xcpmio_idle_t;
+
+typedef struct xcpmio_vector {
+  uint32_t fv_specifier;
+  xcpmio_fv_t fv_type;
+  uint32_t fv_mhz;
+  uint64_t fv_ttd_us;
+  xcpmio_idle_t idle[16];
+} xcpmio_vector_t;
+
+typedef struct xcpmio_qos {
+  char qos_name[16];
+  uint8_t qos_min_index;
+  uint8_t qos_max_index;
+  uint16_t qos_scales[32];
+  uint8_t qos_epp;
+} xcpmio_qos_t;
+
+typedef union xcpmio_var_value {
+  uint64_t v_uint64;
+  char v_string[16];
+} xcpmio_var_value_t;
+
+typedef struct xcpmio_var {
+  char var_name[16];
+  uint32_t var_type;
+  xcpmio_var_value_t var_value;
+} xcpmio_var_t;
+
+typedef struct xcpmio_vectors {
+  uint32 version;
+  xcpmio_vector_t vector[32];
+  xcpmio_qos_t qos[16];
+  xcpmio_var_t vars[16];
+} xcpmio_vectors_t;
+
+
+enum IOPMSleepReason {
+    kIOPMSleepReasonClamshell                   = 101,
+    kIOPMSleepReasonPowerButton                 = 102,
+    kIOPMSleepReasonSoftware                    = 103,
+    kIOPMSleepReasonOSSwitchHibernate           = 104,
+    kIOPMSleepReasonIdle                        = 105,
+    kIOPMSleepReasonLowPower                    = 106,
+    kIOPMSleepReasonThermalEmergency            = 107,
+    kIOPMSleepReasonMaintenance                 = 108,
+    kIOPMSleepReasonSleepServiceExit            = 109,
+    kIOPMSleepReasonDarkWakeThermalEmergency    = 110
+};
+
+#define kIOPMSystemSleepPolicySignature     0x54504c53
+#define kIOPMSystemSleepPolicyVersion       2
+
+typedef struct IOPMSystemSleepPolicyVariables_ {
+  uint32_t signature;                  /* kIOPMSystemSleepPolicySignature */
+  uint32_t version;                    /* kIOPMSystemSleepPolicyVersion */
+  uint64_t currentCapability;          /* current system capability bits */
+  uint64_t highestCapability;          /* highest system capability bits */
+  uint64_t sleepFactors;               /* sleep factor bits */
+  IOPMSleepReason sleepReason;         /* kIOPMSleepReason* */
+  uint32_t sleepPhase;                 /* identify the sleep phase */
+  uint32_t hibernateMode;              /* current hibernate mode */
+  uint32_t standbyDelay;               /* standby delay in seconds */
+  uint32_t standbyTimer;               /* standby timer in seconds */
+  uint32_t poweroffDelay;              /* auto-poweroff delay in seconds */
+  uint32_t scheduledAlarms;            /* bitmask of scheduled alarm types */
+  uint32_t poweroffTimer;              /* auto-poweroff timer in seconds */
+  uint32_t reserved[49];               /* pad sizeof 256 bytes */
+} IOPMSystemSleepPolicyVariables;
+
+typedef struct IOPMSystemSleepPolicyEntryV1_ {
+  uint32_t factorMask;
+  uint32_t factorBits;
+  uint32_t sleepFlags;
+  uint32_t wakeEvents;
+} IOPMSystemSleepPolicyEntryV1;
+
+typedef struct IOPMSystemSleepPolicyTableV1_ {
+  uint32_t signature;
+  uint16_t version;
+  uint16_t entryCount;
+  IOPMSystemSleepPolicyEntryV1 entries[entryCount];
+} IOPMSystemSleepPolicyTableV1;
+
+/* Unused currently, yet present in plists. */
+typedef struct IOPMSystemSleepPolicyEntryV2_ {
+  uint32_t unknown[8];
+} IOPMSystemSleepPolicyEntryV2;
+
+typedef struct IOPMSystemSleepPolicyTableV2_ {
+  uint32_t signature;
+  uint16_t version;
+  uint16_t entryCount;
+  IOPMSystemSleepPolicyEntryV2 entries[entryCount];
+} IOPMSystemSleepPolicyTableV2;
+
+if (ReadUInt(0) == kIOPMSystemSleepPolicySignature) {
+  if (ReadUShort(4) == 1)
+    IOPMSystemSleepPolicyTableV1 sleep_policy;
+  else if (ReadUShort(4) == 2)
+    IOPMSystemSleepPolicyTableV2 sleep_policy;
+} else if (ReadUInt(0) == 2) {
+  xcpmio_vectors_t vectors;
+}
