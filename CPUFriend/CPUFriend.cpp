@@ -33,19 +33,12 @@ IOService *CPUFriendData::probe(IOService *provider, SInt32 *score)
 	if (provider) {
 		if (callbackCpuf) {
 			if (!callbackCpuf->frequencyData) {
-				auto name = provider->getName();
-				if (!name)
-					name = "(null)";
-				
-				DBGLOG("cpuf", "looking for cf-frequency-data in %s", name);
+				DBGLOG("cpuf", "looking for cf-frequency-data in %s", safeString(provider->getName()));
 				auto data = OSDynamicCast(OSData, provider->getProperty("cf-frequency-data"));
 				if (!data) {
 					auto cpu = provider->getParentEntry(gIOServicePlane);
 					if (cpu) {
-						name = cpu->getName();
-						if (!name)
-							name = "(null)";
-						DBGLOG("cpuf", "looking for cf-frequency-data in %s", name);
+						DBGLOG("cpuf", "looking for cf-frequency-data in %s", safeString(cpu->getName()));
 						data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
 					} else {
 						SYSLOG("cpuf", "unable to access cpu parent");
