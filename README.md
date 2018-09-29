@@ -18,6 +18,3 @@ See [Instructions](https://github.com/PMheart/CPUFriend/blob/master/Instructions
 - [Apple](https://www.apple.com) for macOS  
 - [vit9696](https://github.com/vit9696) for [Lilu.kext](https://github.com/vit9696/Lilu) and various helps
 - [PMheart](https://github.com/PMheart) for writing the software and maintaining it
-
-#### Bug reports
-All bugs should be reported at [the issue section of this repository](https://github.com/PMheart/CPUFriend/issues).
