@@ -18,6 +18,7 @@ typedef uint16 uint16_t;
 typedef uint32 uint32_t;
 typedef uint64 uint64_t;
 
+/* These enum values are passed as pmCPUControl commands and are also used in /dev/xcpm ioctl */
 enum {
   /* Calls FreeStats(cmd, data) */
   LEGACY_PM_FREE_STATS             = 0x20005001,
