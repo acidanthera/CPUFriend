@@ -41,16 +41,6 @@
 			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>IOClass</key>
 			<string>CPUFriendData</string>
-			<key>IOParentMatch</key>
-			<dict>
-				<key>IOPropertyMatch</key>
-				<dict>
-					<key>plugin-type</key>
-					<integer>1</integer>
-				</dict>
-				<key>IOProviderClass</key>
-				<string>IOACPIPlatformDevice</string>
-			</dict>
 			<key>IOProbeScore</key>
 			<integer>6000</integer>
 			<key>IOPropertyMatch</key>
