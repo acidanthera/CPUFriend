@@ -115,7 +115,7 @@ function genKext() {
 		</dict>
 	</dict>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2018 Vanilla. All rights reserved.</string>
+	<string>Copyright © 2017 - 2019 PMheart. All rights reserved.</string>
 	<key>OSBundleRequired</key>
 	<string>Root</string>
 </dict>

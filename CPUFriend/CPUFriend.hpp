@@ -2,7 +2,7 @@
 //  CPUFriend.hpp
 //  CPUFriend
 //
-//  Copyright © 2017 Vanilla. All rights reserved.
+//  Copyright © 2017 - 2019 PMheart. All rights reserved.
 //
 
 #ifndef kern_cpuf_hpp

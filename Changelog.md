@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.6
+- Fixed a bug where CPUFriend ceased to work on v1.1.5
+
 #### v1.1.5
 - Support for the old ACPI_SMC_Plugin (as claimed in TO-DO)
 
