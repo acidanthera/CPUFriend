@@ -49,7 +49,8 @@ IOService *CPUFriendData::probe(IOService *provider, SInt32 *score)
 					callbackCpuf->frequencyDataSize = data->getLength();
 					callbackCpuf->frequencyData     = data->getBytesNoCopy();
 				} else {
-					SYSLOG("cpuf", "failed to obtain cf-frequency-data");
+					// This is expected for first start, second will do.
+					DBGLOG("cpuf", "failed to obtain cf-frequency-data");
 				}
 			}
 		} else {
