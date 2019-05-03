@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.7
+- Reduced debug logging in release builds
+
 #### v1.1.6
 - Fixed a bug where CPUFriend ceased to work on v1.1.5
 

@@ -233,6 +233,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 1C748C1D1C21952C0024EED2;
@@ -390,7 +391,7 @@
 				MODULE_NAME = org.vanilla.driver.CPUFriend;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
-				MODULE_VERSION = 1.1.6;
+				MODULE_VERSION = 1.1.7;
 				OTHER_CFLAGS = (
 					"-mmmx",
 					"-msse",
@@ -436,7 +437,7 @@
 				MODULE_NAME = org.vanilla.driver.CPUFriend;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
-				MODULE_VERSION = 1.1.6;
+				MODULE_VERSION = 1.1.7;
 				OTHER_CFLAGS = (
 					"-mmmx",
 					"-msse",
