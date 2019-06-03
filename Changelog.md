@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.8
+- Allow loading on 10.15 without `-lilubetaall`
+
 #### v1.1.7
 - Reduced debug logging in release builds
 
