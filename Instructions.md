@@ -1,12 +1,14 @@
 CPUFriend Installation & Usage
 ===================================
 
-#### System Requirements
-CPUFriend needs macOS ***v10.8*** or greater.
+## WARNING
+Do NOT use CPUFriend until one knows clearly what *power management data* really is! [FrequencyVectors.bt](https://github.com/acidanthera/CPUFriend/blob/master/Tools/FrequencyVectors.bt) can be a good start. *One thing worth mentioning is that CPUFriend should NOT be used only for patching LFM. (Low Frequency Mode)*
 
 #### Installation
-It's highly recommended to let the bootloader inject CPUFriend, otherwise you'll need [LiluFriend](https://github.com/PMheart/LiluFriend) to ensure CPUFriend will work properly.
-Also, theoretically both `ACPI_SMC_PlatformPlugin.kext` and  `X86PlatformPlugin.kext` should be untouched. You'd better use the original ones. (Well, CPUFriend will hook `configResourceCallback(unsigned int, int, void const*, unsigned int, void*)` in either `ACPI_SMC_PlatformPlugin` or `X86PlatformPlugin`, which parses IOKit personalities from Resources, so no problem to use a modified one if you do not really care for the signature, which will be restored in an upcoming system upgrade anyway)
+It's highly recommended to load CPUFriend via kext injection powered by bootloader, otherwise [LiluFriend](https://github.com/PMheart/LiluFriend) may be needed to ensure full functionality. Theoretically both `ACPI_SMC_PlatformPlugin.kext` and `X86PlatformPlugin.kext` should remain untouched. If the very only direct modification is applied to personalities (i.e plists from `Resources`), then safely wait for the next system upgrade. (Patched kexts will be restored by then)
+
+#### Technical background
+Function `configResourceCallback(unsigned int, int, void const*, unsigned int, void*)` from `ACPI_SMC_PlatformPlugin` or `X86PlatformPlugin`, is hooked by CPUFriend to handle customized power management data.
 
 #### Available kernel flags
 Add `-cpufdbg` to enable debug logging (ONLY available in DEBUG binaries).
