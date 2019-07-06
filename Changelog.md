@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.1.9
+- Unified release archive names
+
 #### v1.1.8
 - Allow loading on 10.15 without `-lilubetaall`
 
