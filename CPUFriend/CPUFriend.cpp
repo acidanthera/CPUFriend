@@ -69,10 +69,14 @@ void CPUFriendPlugin::init()
 {
 	callbackCpuf = this;
 	
-	lilu.onKextLoadForce(kextList, kextListSize,
-						 [](void *user, KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
-							static_cast<CPUFriendPlugin *>(user)->processKext(patcher, index, address, size);
-						 }, this);
+	lilu.onKextLoadForce(
+		kextList,
+		kextListSize,
+		[](void *user, KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
+			static_cast<CPUFriendPlugin *>(user)->processKext(patcher, index, address, size);
+		},
+		this
+	);
 }
 
 void CPUFriendPlugin::updateResource(kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength)
