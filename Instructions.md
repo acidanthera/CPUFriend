@@ -55,16 +55,16 @@ NOTE:
 		Return (Package () // size removed
 		{
 			"plugin-type", 
-            One,
-	
+			One,
+
 			//
 			// Paste it from ssdt_data.dsl
 			//
 			"cf-frequency-data",
 			Buffer () // size removed
 			{
-            	// Data from ssdt_data.dsl
-            }
+				// Data from ssdt_data.dsl
+			}
 		})
 	}
 	//
