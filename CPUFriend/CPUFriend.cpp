@@ -9,21 +9,20 @@
 
 #include "CPUFriend.hpp"
 
-static const char *kextACPISMC[] { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/ACPI_SMC_PlatformPlugin.kext/Contents/MacOS/ACPI_SMC_PlatformPlugin" };
-static const char *kextX86PP[] { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
+static const char *kextACPISMC[]     { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/ACPI_SMC_PlatformPlugin.kext/Contents/MacOS/ACPI_SMC_PlatformPlugin" };
+static const char *kextX86PP[]       { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
 static const char *kextMCEReporter[] { "/System/Library/Extensions/AppleIntelMCEReporter.kext/Contents/MacOS/AppleIntelMCEReporter" };
-
 
 enum : size_t {
 	KextACPISMC,
 	KextX86PP,
-    KextMCEReporter
+	KextMCEReporter
 };
 
 static KernelPatcher::KextInfo kextList[] {
-	{ "com.apple.driver.ACPI_SMC_PlatformPlugin", kextACPISMC, arrsize(kextACPISMC), {}, {}, KernelPatcher::KextInfo::Unloaded },
-	{ "com.apple.driver.X86PlatformPlugin", kextX86PP, arrsize(kextX86PP), {}, {}, KernelPatcher::KextInfo::Unloaded },
-	{ "com.apple.driver.AppleIntelMCEReporter", kextMCEReporter, arrsize(kextMCEReporter), {}, {}, KernelPatcher::KextInfo::Unloaded }
+	{ "com.apple.driver.ACPI_SMC_PlatformPlugin", kextACPISMC,     arrsize(kextACPISMC),     {}, {}, KernelPatcher::KextInfo::Unloaded },
+	{ "com.apple.driver.X86PlatformPlugin",       kextX86PP,       arrsize(kextX86PP),       {}, {}, KernelPatcher::KextInfo::Unloaded },
+	{ "com.apple.driver.AppleIntelMCEReporter",   kextMCEReporter, arrsize(kextMCEReporter), {}, {}, KernelPatcher::KextInfo::Unloaded }
 };
 
 static constexpr size_t kextListSize = arrsize(kextList);
@@ -129,22 +128,28 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
 {
 	if (kextList[KextACPISMC].loadIndex == index) {
 		DBGLOG("cpuf", "patching KextACPISMC");
-		KernelPatcher::RouteRequest request("__ZL22configResourceCallbackjiPKvjPv",
-											myACPISMCConfigResourceCallback,
-											orgACPISMCConfigLoadCallback);
+		KernelPatcher::RouteRequest request(
+			"__ZL22configResourceCallbackjiPKvjPv",
+			myACPISMCConfigResourceCallback,
+			orgACPISMCConfigLoadCallback
+		);
 		patcher.routeMultiple(index, &request, 1, address, size);
 	} else if (kextList[KextX86PP].loadIndex == index) {
 		DBGLOG("cpuf", "patching KextX86PP");
-		KernelPatcher::RouteRequest request("__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv",
-											myX86PPConfigResourceCallback,
-											orgX86PPConfigLoadCallback);
+		KernelPatcher::RouteRequest request(
+			"__ZN17X86PlatformPlugin22configResourceCallbackEjiPKvjPv",
+			myX86PPConfigResourceCallback,
+			orgX86PPConfigLoadCallback
+		);
 		patcher.routeMultiple(index, &request, 1, address, size);
 	}
     
 	if (kextList[KextMCEReporter].loadIndex == index) {
 		DBGLOG("cpuf", "patching AppleIntelMCEReporter");
-		KernelPatcher::RouteRequest request("__ZN21AppleIntelMCEReporter5probeEP9IOServicePi",
-											myAppleIntelMCEReporterProbe);
+		KernelPatcher::RouteRequest request(
+			"__ZN21AppleIntelMCEReporter5probeEP9IOServicePi",
+			myAppleIntelMCEReporterProbe
+		);
 		patcher.routeMultiple(index, &request, 1, address, size);
 	}
 
