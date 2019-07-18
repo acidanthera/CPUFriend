@@ -1,5 +1,7 @@
 .DS_Store
 
+build/
+
 CPUFriend/.DS_Store
 
 Tools/.DS_Store
@@ -8,8 +10,5 @@ CPUFriend.xcodeproj/xcuserdata
 CPUFriend.xcodeproj/project.xcworkspace/xcuserdata
 
 Lilu.kext
-
-*.RELEASE.zip
-*.DEBUG.zip
 
 DerivedData
