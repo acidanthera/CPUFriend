@@ -2,11 +2,9 @@ CPUFriend Installation & Usage
 ===================================
 
 ## WARNING
-Do NOT use CPUFriend until one knows clearly what *power management data* really is! [FrequencyVectors.bt](https://github.com/acidanthera/CPUFriend/blob/master/Tools/FrequencyVectors.bt) can be a good start. *One thing worth mentioning is that CPUFriend should NOT be used only for patching LFM. (Low Frequency Mode)*
 Do NOT use CPUFriend for CPU power data management customization until one knows clearly what *power management data* really is! [FrequencyVectors.bt](https://github.com/acidanthera/CPUFriend/blob/master/Tools/FrequencyVectors.bt) can be a good start. *One thing worth mentioning is that CPUFriend should NOT be used only for patching LFM. (Low Frequency Mode)*
 
 #### Installation
-It's highly recommended to load CPUFriend via kext injection powered by bootloader, otherwise [LiluFriend](https://github.com/PMheart/LiluFriend) may be needed to ensure full functionality. Theoretically both `ACPI_SMC_PlatformPlugin.kext` and `X86PlatformPlugin.kext` should remain untouched. If the very only direct modification is applied to personalities (i.e plists from `Resources`), then safely wait for the next system upgrade. (Patched kexts will be restored by then)
 Injection via bootloader is highly recommended, [LiluFriend](https://github.com/PMheart/LiluFriend) may be needed to ensure full functionality otherwise.
 Both `ACPI_SMC_PlatformPlugin` and `X86PlatformPlugin` should remain untouched.
 
