@@ -14,18 +14,6 @@
 		CEBD8C1A1F372A4600BBCB85 /* CPUFriend.hpp in Headers */ = {isa = PBXBuildFile; fileRef = CEBD8C181F372A4600BBCB85 /* CPUFriend.hpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		1C642F521C8F157A006B4C51 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		1C748C271C21952C0024EED2 /* CPUFriend.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CPUFriend.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C748C2C1C21952C0024EED2 /* kern_start.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kern_start.cpp; sourceTree = "<group>"; };
@@ -166,7 +154,6 @@
 				1C748C221C21952C0024EED2 /* Sources */,
 				1C748C231C21952C0024EED2 /* Frameworks */,
 				1C748C241C21952C0024EED2 /* Headers */,
-				1C642F521C8F157A006B4C51 /* CopyFiles */,
 				CE5356961FB9BD050051346D /* Archive */,
 			);
 			buildRules = (
