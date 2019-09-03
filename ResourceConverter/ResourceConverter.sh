@@ -24,7 +24,7 @@ function genSSDT() {
 	IFS=$ifs
 
 	cat << EOF > "${ssdtName}"
-DefinitionBlock ("", "SSDT", 1, "APPLE ", "freqdata", 0x00000001)
+DefinitionBlock ("", "SSDT", 1, "ACDT", "freqdata", 0x00000001)
 {
 		//
 		// The CPU device name. (${cpuName} here)
