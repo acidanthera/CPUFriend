@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.2.0
+- Dropped broken AppleIntelMCEReporter prevention support
+
 #### v1.1.9
 - Unified release archive names
 - Added support for prevention of AppleIntelMCEReporter, details can be found [here](https://github.com/acidanthera/bugtracker/issues/424#issuecomment-512596034)

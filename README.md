@@ -3,7 +3,7 @@ CPUFriend
 
 [![Build Status](https://travis-ci.com/acidanthera/CPUFriend.svg?branch=master)](https://travis-ci.com/acidanthera/CPUFriend) [![Scan Status](https://scan.coverity.com/projects/16841/badge.svg?flat=1)](https://scan.coverity.com/projects/16841)
 
-A [Lilu](https://github.com/vit9696/Lilu) plug-in for dynamic power management data injection and prevention of AppleIntelMCEReporter, details can be found [here](https://github.com/acidanthera/bugtracker/issues/424#issuecomment-512596034).
+A [Lilu](https://github.com/vit9696/Lilu) plug-in for dynamic power management data injection.
 
 #### Notes
 This repository should be compiled with latest [Lilu](https://github.com/vit9696/Lilu), otherwise the compilation will fail!

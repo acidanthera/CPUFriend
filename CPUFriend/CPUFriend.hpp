@@ -52,7 +52,6 @@ private:
 	 */
 	static void myACPISMCConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
 	static void myX86PPConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context);
-	static IOService *myAppleIntelMCEReporterProbe(IOService *, IOService *, SInt32 *);
 
 	/**
 	 *  Patch kext if needed and prepare other patches

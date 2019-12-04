@@ -11,18 +11,15 @@
 
 static const char *kextACPISMC[]     { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/ACPI_SMC_PlatformPlugin.kext/Contents/MacOS/ACPI_SMC_PlatformPlugin" };
 static const char *kextX86PP[]       { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
-static const char *kextMCEReporter[] { "/System/Library/Extensions/AppleIntelMCEReporter.kext/Contents/MacOS/AppleIntelMCEReporter" };
 
 enum : size_t {
 	KextACPISMC,
 	KextX86PP,
-	KextMCEReporter
 };
 
 static KernelPatcher::KextInfo kextList[] {
 	{ "com.apple.driver.ACPI_SMC_PlatformPlugin", kextACPISMC,     arrsize(kextACPISMC),     {}, {}, KernelPatcher::KextInfo::Unloaded },
 	{ "com.apple.driver.X86PlatformPlugin",       kextX86PP,       arrsize(kextX86PP),       {}, {}, KernelPatcher::KextInfo::Unloaded },
-	{ "com.apple.driver.AppleIntelMCEReporter",   kextMCEReporter, arrsize(kextMCEReporter), {}, {}, KernelPatcher::KextInfo::Unloaded }
 };
 
 static constexpr size_t kextListSize = arrsize(kextList);
@@ -116,14 +113,6 @@ void CPUFriendPlugin::myX86PPConfigResourceCallback(uint32_t requestTag, kern_re
 	FunctionCast(myX86PPConfigResourceCallback, callbackCpuf->orgX86PPConfigLoadCallback)(requestTag, result, resourceData, resourceDataLength, context);
 }
 
-IOService *CPUFriendPlugin::myAppleIntelMCEReporterProbe(IOService *, IOService *, SInt32 *)
-{
-	DBGLOG("cpuf", "killing AppleIntelMCEReporter");
-
-	// always return nullptr for prevention of AppleIntelMCEReporter.
-	return nullptr;
-}
-
 void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size)
 {
 	if (kextList[KextACPISMC].loadIndex == index) {
@@ -143,14 +132,4 @@ void CPUFriendPlugin::processKext(KernelPatcher &patcher, size_t index, mach_vm_
 		);
 		patcher.routeMultiple(index, &request, 1, address, size);
 	}
-    
-	if (kextList[KextMCEReporter].loadIndex == index) {
-		DBGLOG("cpuf", "patching AppleIntelMCEReporter");
-		KernelPatcher::RouteRequest request(
-			"__ZN21AppleIntelMCEReporter5probeEP9IOServicePi",
-			myAppleIntelMCEReporterProbe
-		);
-		patcher.routeMultiple(index, &request, 1, address, size);
-	}
-
 }
