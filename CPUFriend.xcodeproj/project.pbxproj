@@ -232,6 +232,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -279,6 +280,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = x86_64;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -355,8 +357,8 @@
 					"-fno-builtin",
 					"-fno-asynchronous-unwind-tables",
 					"-Wno-unknown-warning-option",
- 					"-Wno-ossharedptr-misuse",
- 					"-Wno-vla",
+					"-Wno-ossharedptr-misuse",
+					"-Wno-vla",
 				);
 				OTHER_LDFLAGS = "-static";
 				PRODUCT_BUNDLE_IDENTIFIER = org.vanilla.driver.CPUFriend;
@@ -404,8 +406,8 @@
 					"-fno-builtin",
 					"-fno-asynchronous-unwind-tables",
 					"-Wno-unknown-warning-option",
- 					"-Wno-ossharedptr-misuse",
- 					"-Wno-vla",
+					"-Wno-ossharedptr-misuse",
+					"-Wno-vla",
 				);
 				OTHER_LDFLAGS = "-static";
 				PRODUCT_BUNDLE_IDENTIFIER = org.vanilla.driver.CPUFriend;
