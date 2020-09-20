@@ -9,7 +9,7 @@
 #define kern_cpuf_hpp
 
 #include <Headers/kern_patcher.hpp>
-#include <Library/LegacyIOService.h>
+#include <IOKit/IOService.h>
 
 class EXPORT CPUFriendData : public IOService {
 	OSDeclareDefaultStructors(CPUFriendData)
