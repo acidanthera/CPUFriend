@@ -14,7 +14,7 @@ function showHelp() {
 
 function genSSDT() {
 	local src="$1"
-	local data2Hex="$(xxd -pr -u $1 | tr -d '\n' | sed 's/.\{2\}/\0x&, /g')"
+	local data2Hex=$(xxd -pr -u "$src" | tr -d '\n' | sed 's/.\{2\}/\0x&, /g')
 
 	local ifs=$IFS
 	IFS=$'\n'
@@ -68,7 +68,7 @@ EOF
 
 function genKext() {
 	local src="$1"
-	local data2B64="$(cat $1 | base64)"
+	local data2B64=$(cat "$src" | base64)
 
 	mkdir -p "${kextName}/Contents" && pushd "${kextName}/Contents" &> /dev/null
 
