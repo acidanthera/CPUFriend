@@ -1,7 +1,7 @@
 CPUFriend
 =========
 
-[![Build Status](https://github.com/acidanthera/CPUFriend.svg/workflows/CI/badge?branch=master)](https://github.com/acidanthera/CPUFriend/actions) [![Scan Status](https://scan.coverity.com/projects/16841/badge.svg?flat=1)](https://scan.coverity.com/projects/16841)
+[![Build Status](https://github.com/acidanthera/CPUFriend/workflows/CI/badge.svg?branch=master)](https://github.com/acidanthera/CPUFriend/actions) [![Scan Status](https://scan.coverity.com/projects/16841/badge.svg?flat=1)](https://scan.coverity.com/projects/16841)
 
 A [Lilu](https://github.com/vit9696/Lilu) plug-in for dynamic power management data injection.
 
