@@ -7,8 +7,8 @@ ssdtName="ssdt_data.dsl"
 
 function showHelp() {
 	echo -e "Usage:\n"
-	echo "-a, --acpi file Create ${kextName} with information provided by file."
-	echo "-k, --kext file Create ${ssdtName} with information provided by file."
+	echo "-a, --acpi file Create ${ssdtName} with information provided by file."
+	echo "-k, --kext file Create ${kextName} with information provided by file."
 	echo
 }
 
