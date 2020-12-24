@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.2.3
+- Improved path handling in generator scripts
+
 #### v1.2.2
 - Added MacKernelSDK with Xcode 12 compatibility
 
