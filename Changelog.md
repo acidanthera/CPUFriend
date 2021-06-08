@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.2.4
+- Added constants for 12.0 support
+
 #### v1.2.3
 - Improved path handling in generator scripts
 
