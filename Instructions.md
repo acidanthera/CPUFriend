@@ -2,6 +2,8 @@ CPUFriend Installation & Usage
 ===================================
 
 ## WARNING
+**CPUFriend is most likely _NOT_ required when not sure whether or not to use it.**
+
 In most cases the native CPU power management data from `ACPI_SMC_PlatformPlugin` or `X86PlatformPlugin` work out of the box. Do NOT use CPUFriend for data customization until one knows clearly what *power management data* really is. Instead, changing SMBIOS, which results in other data being used, can be more reasonable. [FrequencyVectors.bt](https://github.com/acidanthera/CPUFriend/blob/master/Tools/FrequencyVectors.bt) can be a good start for the analysis of `FrequencyVectors`. *Another thing worth mentioning is that CPUFriend should NOT be used only for patching LFM (Low Frequency Mode), particularly on mobile models including MacBook series.*
 
 #### Technical background
