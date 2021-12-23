@@ -138,7 +138,7 @@ proc IOPMSystemSleepPolicyTableV1 {} {
 
 proc IOPMSystemSleepPolicyEntryV2 {} {
 	section "unknown" {
-		for {set i 0} {$i < $entryCount} {incr i} {
+		for {set i 0} {$i < 8} {incr i} {
 			uint32 "$i"
 		}
 	}
