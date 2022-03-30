@@ -2,7 +2,7 @@ CPUFriend Changelog
 ===================
 #### v1.2.5
 - Added support from macOS 10.6
-- Imporved FrequencyVectors analyzer by @usr-sse2
+- Improved FrequencyVectors analyzer by @usr-sse2
 
 #### v1.2.4
 - Added constants for macOS 12 support
