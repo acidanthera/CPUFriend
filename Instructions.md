@@ -9,6 +9,11 @@ Do not use CPUFriend for data customization until one knows clearly what power m
 If possible, changing SMBIOS, which results in other data being used, can be more reasonable.
 In [Tools](https://github.com/acidanthera/CPUFriend/tree/master/Tools), several analyzer scripts for `FrequencyVectors` are provided as a good beginning.
 Also, CPUFriend should not be used to break the native CPU performance tuning mechanism by patching e.g. LFM (Low Frequency Mode).
+In case of necessity for manual performance tuning, the following scripts might be used:
+- [CPUFriendFriend](https://github.com/corpnewt/CPUFriendFriend) by [corpnewt](https://github.com/corpnewt)
+- [one-key-cpufriend](https://github.com/stevezhengshiqi/one-key-cpufriend) by [stevezhengshiqi](https://github.com/stevezhengshiqi)
+
+Nevertheless, _NO support_ will be provided from the side of CPUFriend as it only handles data injection. Please file issues at the corresponding repositories instead.
 
 #### Technical background
 - Function `configResourceCallback()` from `ACPI_SMC_PlatformPlugin` or `X86PlatformPlugin` is hooked so as to handle customized CPU power management data from user. If nothing is provided, CPUFriend does nothing and the original data is to be used as if this kext is not installed.
