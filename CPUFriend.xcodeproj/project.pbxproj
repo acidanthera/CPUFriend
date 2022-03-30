@@ -40,6 +40,9 @@
 		CE8DA0BE2517DD4A008C44E8 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = ../Lilu/MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		CEBD8C171F372A4600BBCB85 /* CPUFriend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUFriend.cpp; sourceTree = "<group>"; };
 		CEBD8C181F372A4600BBCB85 /* CPUFriend.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CPUFriend.hpp; sourceTree = "<group>"; };
+		CEDF9CEF27F4B68A0030425C /* FrequencyVectors.tcl */ = {isa = PBXFileReference; lastKnownFileType = text; path = FrequencyVectors.tcl; sourceTree = "<group>"; };
+		CEDF9CF027F4B68A0030425C /* FrequencyVectors.bt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FrequencyVectors.bt; sourceTree = "<group>"; };
+		CEDF9CF127F4B68A0030425C /* ResourceConverter.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ResourceConverter.sh; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +60,9 @@
 		1C748C1D1C21952C0024EED2 = {
 			isa = PBXGroup;
 			children = (
-				1CF01C911C8CF982002DCEA3 /* Docs */,
 				CE405EC81E49DD7B00AA0B3D /* SDK */,
+				1CF01C911C8CF982002DCEA3 /* Docs */,
+				CEDF9CEE27F4B68A0030425C /* Tools */,
 				1C748C291C21952C0024EED2 /* CPUFriend */,
 				1C748C281C21952C0024EED2 /* Products */,
 				CE8DA0BD2517DD4A008C44E8 /* Frameworks */,
@@ -143,6 +147,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CEDF9CEE27F4B68A0030425C /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				CEDF9CF027F4B68A0030425C /* FrequencyVectors.bt */,
+				CEDF9CEF27F4B68A0030425C /* FrequencyVectors.tcl */,
+				CEDF9CF127F4B68A0030425C /* ResourceConverter.sh */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -181,8 +195,8 @@
 		1C748C1E1C21952C0024EED2 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1200;
-				ORGANIZATIONNAME = Vanilla;
+				LastUpgradeCheck = 1330;
+				ORGANIZATIONNAME = Acidanthera;
 				TargetAttributes = {
 					1C748C261C21952C0024EED2 = {
 						CreatedOnToolsVersion = 7.2;
@@ -242,7 +256,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -259,6 +272,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -292,7 +306,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = x86_64;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
@@ -309,6 +322,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -355,7 +369,7 @@
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_NAME = org.vanilla.driver.CPUFriend;
+				MODULE_NAME = org.acidanthera.driver.CPUFriend;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.2.5;
@@ -375,7 +389,7 @@
 					"-Wno-vla",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = org.vanilla.driver.CPUFriend;
+				PRODUCT_BUNDLE_IDENTIFIER = org.acidanthera.driver.CPUFriend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
 			};
@@ -404,7 +418,7 @@
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
-				MODULE_NAME = org.vanilla.driver.CPUFriend;
+				MODULE_NAME = org.acidanthera.driver.CPUFriend;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.2.5;
@@ -424,7 +438,7 @@
 					"-Wno-vla",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = org.vanilla.driver.CPUFriend;
+				PRODUCT_BUNDLE_IDENTIFIER = org.acidanthera.driver.CPUFriend;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_STYLE = "non-global";
 				WRAPPER_EXTENSION = kext;

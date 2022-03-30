@@ -6,7 +6,8 @@
 #   Version: 0.1
 #   Purpose: Intel XCPM Frequency and IOPMSystemSleepPolicyVariables Decoding
 #
-# Copyright (c) 2018 vit9696
+# Adapted to HexFiend format by usr-sse2.
+# Copyright (c) 2018-2022 vit9696. All rights reserved.
 #
 # Thanks to Apple for XNU Debug Information <3.
 #

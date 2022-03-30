@@ -28,7 +28,7 @@ function genSSDT() {
   IFS=$ifs
 
   cat << EOF > "${ssdtFile}"
-DefinitionBlock ("", "SSDT", 1, "ACDT", "freqdata", 0x00000001)
+DefinitionBlock ("", "SSDT", 2, "ACDT", "FreqData", 0x00000000)
 {
   //
   // CPU device name, detected from ioreg.
@@ -82,7 +82,7 @@ function genKext() {
 <plist version="1.0">
 <dict>
   <key>CFBundleIdentifier</key>
-  <string>org.vanilla.driver.CPUFriendDataProvider</string>
+  <string>org.acidanthera.driver.CPUFriendDataProvider</string>
   <key>CFBundleInfoDictionaryVersion</key>
   <string>6.0</string>
   <key>CFBundleName</key>
@@ -90,9 +90,9 @@ function genKext() {
   <key>CFBundlePackageType</key>
   <string>KEXT</string>
   <key>CFBundleShortVersionString</key>
-  <string>1.0.0</string>
+  <string>1.0.1</string>
   <key>CFBundleVersion</key>
-  <string>1.0.0</string>
+  <string>1.0.1</string>
   <key>IOKitPersonalities</key>
   <dict>
     <key>CPUFriendDataProvider</key>
@@ -112,7 +112,7 @@ function genKext() {
     </dict>
   </dict>
   <key>NSHumanReadableCopyright</key>
-  <string>Copyright © 2017 - 2022 PMheart. All rights reserved.</string>
+  <string>Copyright © 2017-2022 PMheart. All rights reserved.</string>
   <key>OSBundleRequired</key>
   <string>Root</string>
 </dict>

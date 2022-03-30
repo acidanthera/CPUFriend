@@ -14,6 +14,6 @@ Note: ***Debug version of Lilu.kext and MacKernelSDK project folder should be pu
 See [Instructions](https://github.com/acidanthera/CPUFriend/blob/master/Instructions.md) for more details.
 
 #### Credits
-- [Apple](https://www.apple.com) for macOS  
+- [Apple](https://www.apple.com) for macOS
 - [vit9696](https://github.com/vit9696) for [Lilu.kext](https://github.com/acidanthera/Lilu) and various helps
 - [PMheart](https://github.com/PMheart) for writing the software and maintaining it
