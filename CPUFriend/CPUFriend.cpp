@@ -9,8 +9,8 @@
 
 #include "CPUFriend.hpp"
 
-static const char *kextACPISMC[]     { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/ACPI_SMC_PlatformPlugin.kext/Contents/MacOS/ACPI_SMC_PlatformPlugin" };
-static const char *kextX86PP[]       { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
+static const char *kextACPISMC[] { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/ACPI_SMC_PlatformPlugin.kext/Contents/MacOS/ACPI_SMC_PlatformPlugin" };
+static const char *kextX86PP[]   { "/System/Library/Extensions/IOPlatformPluginFamily.kext/Contents/PlugIns/X86PlatformPlugin.kext/Contents/MacOS/X86PlatformPlugin" };
 
 enum : size_t {
 	KextACPISMC,
@@ -18,8 +18,8 @@ enum : size_t {
 };
 
 static KernelPatcher::KextInfo kextList[] {
-	{ "com.apple.driver.ACPI_SMC_PlatformPlugin", kextACPISMC,     arrsize(kextACPISMC),     {}, {}, KernelPatcher::KextInfo::Unloaded },
-	{ "com.apple.driver.X86PlatformPlugin",       kextX86PP,       arrsize(kextX86PP),       {}, {}, KernelPatcher::KextInfo::Unloaded },
+	{ "com.apple.driver.ACPI_SMC_PlatformPlugin", kextACPISMC, arrsize(kextACPISMC), {}, {}, KernelPatcher::KextInfo::Unloaded },
+	{ "com.apple.driver.X86PlatformPlugin",       kextX86PP,   arrsize(kextX86PP),   {}, {}, KernelPatcher::KextInfo::Unloaded },
 };
 
 static constexpr size_t kextListSize = arrsize(kextList);
@@ -30,32 +30,39 @@ OSDefineMetaClassAndStructors(CPUFriendData, IOService)
 
 IOService *CPUFriendData::probe(IOService *provider, SInt32 *score)
 {
-	if (provider) {
-		if (callbackCpuf) {
-			if (!callbackCpuf->frequencyData) {
-				DBGLOG("cpuf", "looking for cf-frequency-data in %s", safeString(provider->getName()));
-				auto data = OSDynamicCast(OSData, provider->getProperty("cf-frequency-data"));
-				if (!data) {
-					auto cpu = provider->getParentEntry(gIOServicePlane);
-					if (cpu) {
-						DBGLOG("cpuf", "looking for cf-frequency-data again in %s", safeString(cpu->getName()));
-						data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
-					} else {
-						SYSLOG("cpuf", "unable to access cpu parent");
-					}
-				}
-				// try again
-				if (data) {
-					callbackCpuf->frequencyDataSize = data->getLength();
-					callbackCpuf->frequencyData     = data->getBytesNoCopy();
-				} else {
-					// This is expected for first start, second will do.
-					DBGLOG("cpuf", "failed to obtain cf-frequency-data");
-				}
-			}
-		} else {
-			SYSLOG("cpuf", "missing storage instance");
+	if (!provider) {
+		return nullptr;
+	}
+	
+	if (!callbackCpuf) {
+		SYSLOG("cpuf", "missing storage instance");
+		return nullptr;
+	}
+	
+	if (callbackCpuf->frequencyData) {
+		DBGLOG("cpuf", "frequency data already obtained, skipping");
+		return nullptr;
+	}
+	
+	DBGLOG("cpuf", "looking for cf-frequency-data in %s", safeString(provider->getName()));
+	auto data = OSDynamicCast(OSData, provider->getProperty("cf-frequency-data"));
+	if (!data) {
+		auto cpu = provider->getParentEntry(gIOServicePlane);
+		if (!cpu) {
+			SYSLOG("cpuf", "unable to access cpu parent");
+			return nullptr;
 		}
+		
+		DBGLOG("cpuf", "looking for cf-frequency-data again in %s", safeString(cpu->getName()));
+		data = OSDynamicCast(OSData, cpu->getProperty("cf-frequency-data"));
+	}
+	
+	if (data) {
+		callbackCpuf->frequencyDataSize = data->getLength();
+		callbackCpuf->frequencyData     = data->getBytesNoCopy();
+	} else {
+		// This is expected for first start, second will do.
+		DBGLOG("cpuf", "failed to obtain cf-frequency-data");
 	}
 	
 	return nullptr;
@@ -77,39 +84,40 @@ void CPUFriendPlugin::init()
 
 void CPUFriendPlugin::updateResource(kern_return_t &result, const void * &resourceData, uint32_t &resourceDataLength)
 {
-	if (callbackCpuf) {
-		auto data = callbackCpuf->frequencyData;
-		auto sz   = callbackCpuf->frequencyDataSize;
-		if (data && sz > 0) {
-			DBGLOG("cpuf", "feeding frequency data %u", sz);
-			resourceData = data;
-			resourceDataLength = sz;
-			result = kOSReturnSuccess;
-		} else {
-			// this is fine when not providing customized data,
-			// in the worst case it's just the original
-			// frequencyData and frequencyDataSize get handled,
-			// which looks safe enough.
-			DBGLOG("cpuf", "failed to feed cpu data (%u, %d), feeding data from org callback", sz, data != nullptr);
-		}
-	} else {
-		SYSLOG("cpuf", "config callback arrived at nowhere");
-	}
+  if (!callbackCpuf) {
+    SYSLOG("cpuf", "config callback arrived at nowhere");
+    return;
+  }
+
+  auto data = callbackCpuf->frequencyData;
+  auto size = callbackCpuf->frequencyDataSize;
+  if (data && size > 0) {
+    DBGLOG("cpuf", "feeding frequency data, size %u", size);
+    resourceData       = data;
+    resourceDataLength = size;
+    result = kOSReturnSuccess;
+  } else {
+    // this is fine when not providing customized data,
+    // in the worst case it's just the original
+    // frequencyData and frequencyDataSize get handled,
+    // which looks safe enough.
+    DBGLOG("cpuf", "failed to feed cpu data (size %u, %d), feeding data from org callback", size, data != nullptr);
+  }
 }
 
 void CPUFriendPlugin::myACPISMCConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
 {
-	DBGLOG("cpuf", "myACPISMCConfigResourceCallback %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	DBGLOG("cpuf", "myACPISMCConfigResourceCallback before (tag %u, result %d, data %d, size %u, context %d)", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
 	callbackCpuf->updateResource(result, resourceData, resourceDataLength);
-	DBGLOG("cpuf", "myACPISMCConfigResourceCallback done %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	DBGLOG("cpuf", "myACPISMCConfigResourceCallback after (tag %u, result %d, data %d, size %u, context %d)", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
 	FunctionCast(myACPISMCConfigResourceCallback, callbackCpuf->orgACPISMCConfigLoadCallback)(requestTag, result, resourceData, resourceDataLength, context);
 }
 
 void CPUFriendPlugin::myX86PPConfigResourceCallback(uint32_t requestTag, kern_return_t result, const void *resourceData, uint32_t resourceDataLength, void *context)
 {
-	DBGLOG("cpuf", "myX86PPConfigResourceCallback %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	DBGLOG("cpuf", "myX86PPConfigResourceCallback before (tag %u, result %d, data %d, size %u, context %d)", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
 	callbackCpuf->updateResource(result, resourceData, resourceDataLength);
-	DBGLOG("cpuf", "myX86PPConfigResourceCallback done %u %d %d %u %d", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
+	DBGLOG("cpuf", "myX86PPConfigResourceCallback after (tag %u, result %d, data %d, size %u, context %d)", requestTag, result, resourceData != nullptr, resourceDataLength, context != nullptr);
 	FunctionCast(myX86PPConfigResourceCallback, callbackCpuf->orgX86PPConfigLoadCallback)(requestTag, result, resourceData, resourceDataLength, context);
 }
 
