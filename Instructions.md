@@ -15,6 +15,8 @@ In case of necessity for manual performance tuning, the following scripts might 
 
 Nevertheless, _NO support_ will be provided from the side of CPUFriend as it only handles data injection. Please file issues at the corresponding repositories instead.
 
+While such automated scripts bring convenience, it is, however, still necessary to understand the meaning of these modifications. Otherwise once again, consider not using CPUFriend.
+
 #### Technical background
 - Function `configResourceCallback()` from `ACPI_SMC_PlatformPlugin` or `X86PlatformPlugin` is hooked so as to handle customized CPU power management data from user. If nothing is provided, CPUFriend does nothing and the original data is to be used as if this kext is not installed.
 
