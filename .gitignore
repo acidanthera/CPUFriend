@@ -1,9 +1,47 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Other
 .DS_Store
-build/
-CPUFriend/.DS_Store
-Tools/.DS_Store
+
 CPUFriend.xcodeproj/xcuserdata
 CPUFriend.xcodeproj/project.xcworkspace/xcuserdata
+CPUFriend/.DS_Store
+xcuserdata
+xcshareddata
+project.xcworkspace
+
 Lilu.kext
 DerivedData
 /MacKernelSDK
+build
