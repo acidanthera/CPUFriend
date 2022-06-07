@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.2.6
+- Added constants for macOS 13 support
+
 #### v1.2.5
 - Added support from macOS 10.6
 - Improved FrequencyVectors analyzer by @usr-sse2
