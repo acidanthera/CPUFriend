@@ -13,7 +13,10 @@ function showHelp() {
   echo
   echo "-h, --help        Show this help message."
   echo "-a, --acpi <file> Create ${ssdtFile} with CPU power management data provided by file."
-  echo "-k, --kext <file> Create ${kextFile} with CPU power management data provided by file."
+  echo
+  echo "-k, --kext <file> (version) Create ${kextFile} with CPU power management data provided by file."
+  echo "For cross-version compatibility, version can be specified when creating the kext bundle to be used together with OC MinKernel/MaxKernel."
+  echo "e.g. $0 --kext path/to/PM/plist 110 - This creates CPUFriendDataProvider_110.kext."
 }
 
 function genSSDT() {
@@ -158,6 +161,11 @@ function main() {
       shift
       if [ ! -f "$1" ]; then
         abort "$1 does not exist!"
+      fi
+
+      # $2 is the optional version info
+      if [ "$2" != "" ]; then
+        kextFile="CPUFriendDataProvider_$2.kext"
       fi
 
       if [ -d "${kextFile}" ]; then
