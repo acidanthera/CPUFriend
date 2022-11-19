@@ -11,7 +11,7 @@ This repository must be compiled with latest [Lilu](https://github.com/acidanthe
 Note: ***Debug version of Lilu.kext and MacKernelSDK project folder should be put in the same folder as CPUFriend! And debug versions of Lilu and CPUFriend should also be used together when debugging!***
 
 #### Configuration
-See [Instructions](https://github.com/acidanthera/CPUFriend/blob/master/Instructions.md) for more details.
+This kext is most likely not required when the CPU is natively supported by XNU (macOS kernel). In case of necessity, please see [Instructions](https://github.com/acidanthera/CPUFriend/blob/master/Instructions.md) for configuration.
 
 #### Credits
 - [Apple](https://www.apple.com) for macOS
