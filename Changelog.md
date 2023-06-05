@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.2.7
+- Added constants for macOS 14 support
+
 #### v1.2.6
 - Added constants for macOS 13 support
 
