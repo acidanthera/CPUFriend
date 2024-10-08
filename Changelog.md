@@ -1,5 +1,8 @@
 CPUFriend Changelog
 ===================
+#### v1.2.9
+- Fixed loading on macOS 10.10 and older due to a MacKernelSDK regression
+
 #### v1.2.8
 - Added constants for macOS 15 support
 
